@@ -87,6 +87,46 @@ layout: default
   </div>
 </section>
 
+<!--- Plugins -->
+<section id="plugins" class="flex-col py-8 md:pb-16 md:pt-12 px-6 mx-auto max-w-5xl border-b border-gray-200">
+  <h2 class="text-center font-heading text-3xl font-bold text-heading mb-8">Plugins</h2>
+  <div class="flex mx-auto items-center max-w-3xl">
+    <div class="code-example flex flex-col">
+      <div class="code-example-header">
+        <span class="code-dot bg-[#f38ba8]"></span>
+        <span class="code-dot bg-[#f9e2af]"></span>
+        <span class="code-dot bg-[#a6e3a1]"></span>
+        <span class="ml-2 font-mono text-xs text-gray-500">.rubocop.yml</span>
+      </div>
+      <pre class="code-example-body overflow-x-auto grow"><code><span><span class="ln">  1</span><span class="comment"># It's possible to extend RuboCop with additional cops and formatters.</span></span>
+<span><span class="ln">  2</span><span class="comment"># <a target="_blank" href="https://docs.rubocop.org/rubocop/extensions.html">Learn more</a></span></span>
+<span><span class="ln">  3</span><span class="comment">#</span></span>
+<span><span class="ln">  4</span><span class="comment"># Official Extensions maintained by the RuboCop's team:</span></span>
+<span><span class="ln">  5</span><span class="comment"># (clicking on them leads to their GitHub repo)</span></span>
+<span><span class="ln">  6</span></span>
+<span><span class="ln">  7</span>---</span>
+<span><span class="ln">  8</span><span class="function">plugins:</span></span>
+<span><span class="ln">  9</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-performance">rubocop-performance</a></span>  <span class="comment"># Performance optimization analysis</span></span>
+<span><span class="ln"> 10</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rails">rubocop-rails</a></span>  <span class="comment"># Rails-specific analysis</span></span>
+<span><span class="ln"> 11</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rspec">rubocop-rspec</a></span>  <span class="comment"># Rspec-specific analysis</span></span>
+<span><span class="ln"> 12</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-minitest">rubocop-minitest</a></span>  <span class="comment"># Minitest-specific analysis</span></span>
+<span><span class="ln"> 13</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rake">rubocop-rake</a></span>  <span class="comment"># Rake-specific analysis</span></span>
+<span><span class="ln"> 14</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-sequel">rubocop-sequel</a></span>  <span class="comment"># Code style checking for Sequel gem</span></span>
+<span><span class="ln"> 15</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-thread_safety">rubocop-thread_safety</a></span>  <span class="comment"># Thread-safety analysis</span></span>
+<span><span class="ln"> 16</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-capybara">rubocop-capybara</a></span>  <span class="comment"># Capybara-specific analysis</span></span>
+<span><span class="ln"> 17</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-factory_bot">rubocop-factory_bot</a></span>  <span class="comment"># factory_bot-specific analysis</span></span>
+<span><span class="ln"> 18</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rspec_rails">rubocop-rspec_rails</a></span>  <span class="comment"># RSpec Rails-specific analysis</span></span>
+<span><span class="ln"> 19</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-i18n">rubocop-i18n</a></span>  <span class="comment"># i18n wrapper function analysis (gettext and rails-i18n)</span></span>
+<span><span class="ln"> 20</span></span>
+<span class="ln"> 21</span><span class="comment"># Third-party Extensions:</span></span>
+<span class="ln"> 22</span><span class="comment"># <a target="_blank" href="https://docs.rubocop.org/rubocop/extensions.html#third-party-extensions">https://docs.rubocop.org/rubocop/extensions.html#third-party-extensions</a></span></span>
+<span class="ln"> 23</span></span>
+
+</code></pre>
+    </div>
+  </div>
+</section>
+
 <!-- Stats -->
 <section id="stats" class="text-center py-8 md:py-16 px-6 mx-auto max-w-5xl border-b border-gray-200">
   <h2 class="font-heading text-3xl font-semibold text-heading mb-10">The Ruby linter used by the community</h2>

@@ -50,6 +50,8 @@
 .code-example-body .class { color: #f9e2af; }
 .code-example-body .function { color: #89b4fa; }
 .code-example-body .string { color: #a6e3a1; }
+.code-example-body a { text-decoration: underline ;}
+.code-example-body a:hover { color: #cba6f7; }
 .code-example-body .parameter { color: #eba0ac; }
 .code-example-body .numeric { color: #fab387; }
 .code-example-body .comment { color: #9399B2; }
