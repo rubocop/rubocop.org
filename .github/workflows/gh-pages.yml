@@ -4,7 +4,7 @@ name: Deploy to GitHub pages
 "on":
   push:
     branches:
-      - gh-pages
+      - main
 
 jobs:
   build:
@@ -12,10 +12,10 @@ jobs:
     env:
       BRIDGETOWN_ENV: production
       BASE_PATH: >-
-        ${{ github.repository != 'rubocop/rubocop'
-            && '/rubocop' || '/' }}
+        ${{ github.repository != 'rubocop/rubocop.org'
+            && '/rubocop.org' || '/' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -23,7 +23,7 @@ jobs:
           bundler-cache: true
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: "npm"
@@ -33,7 +33,7 @@ jobs:
         run: bin/bridgetown deploy
 
       - name: Upload build artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./output
 
