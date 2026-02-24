@@ -30,6 +30,25 @@
   background: #181825;
 }
 
+.code-tabs {
+  @apply flex gap-1;
+}
+
+.code-tab {
+  @apply px-2.5 py-0.5 rounded text-xs font-medium cursor-pointer border-none transition-colors;
+  background: transparent;
+  color: #585b70;
+}
+
+.code-tab:hover {
+  color: #cdd6f4;
+}
+
+.code-tab.active {
+  background: #313244;
+  color: #cdd6f4;
+}
+
 .code-dot {
   @apply w-3 h-3 rounded-full;
 }
@@ -62,9 +81,10 @@
 /* Offense squiggly underline + tooltip */
 .offense {
   @apply relative cursor-help;
-  text-decoration: wavy underline var(--color-accent);
+  text-decoration: wavy underline #f38ba8;
   text-decoration-skip-ink: none;
   text-underline-offset: 3px;
+  background: rgba(243, 139, 168, 0.08);
 }
 
 .offense::after {

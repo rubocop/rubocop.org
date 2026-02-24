@@ -63,8 +63,12 @@ layout: default
         <span class="code-dot bg-[#f9e2af]"></span>
         <span class="code-dot bg-[#a6e3a1]"></span>
         <span class="ml-2 font-mono text-xs text-gray-500">user_greeting.rb</span>
+        <div class="code-tabs ml-auto">
+          <button class="code-tab active" data-tab="before">Before</button>
+          <button class="code-tab" data-tab="after">After</button>
+        </div>
       </div>
-      <pre class="code-example-body grow"><code><span><span class="ln"> 1</span><span class="comment"># frozen_string_literal: true</span></span>
+      <pre class="code-example-body grow" id="code-before"><code><span><span class="ln"> 1</span><span class="comment"># frozen_string_literal: true</span></span>
 <span><span class="ln"> 2</span></span>
 <span><span class="ln"> 3</span><span class="comment"># Manages user greeting logic</span></span>
 <span><span class="ln"> 4</span><span class="keyword">class</span> <span class="class">UserGreeting</span></span>
@@ -83,6 +87,21 @@ layout: default
 <span><span class="ln">17</span>  <span class="keyword">end</span></span>
 <span><span class="ln">18</span><span class="keyword">end</span></span>
 <span><span class="ln">19</span></span></code></pre>
+      <pre class="code-example-body grow hidden" id="code-after"><code><span><span class="ln"> 1</span><span class="comment"># frozen_string_literal: true</span></span>
+<span><span class="ln"> 2</span></span>
+<span><span class="ln"> 3</span><span class="comment"># Manages user greeting logic</span></span>
+<span><span class="ln"> 4</span><span class="keyword">class</span> <span class="class">UserGreeting</span></span>
+<span><span class="ln"> 5</span>  <span class="keyword">def</span> <span class="function">say_hello</span><span class="brackets">(</span><span class="parameter">name</span><span class="brackets">)</span></span>
+<span><span class="ln"> 6</span>    <span class="parameter">name</span> <span class="operator">=</span> <span class="string">'stranger'</span> <span class="keyword">if</span> <span class="parameter">name</span><span class="function">.nil?</span></span>
+<span><span class="ln"> 7</span></span>
+<span><span class="ln"> 8</span>    msg = <span class="string">"Hello,</span> <span class="comment">#</span><span class="brackets">{</span><span class="parameter">name</span><span class="brackets">}</span><span class="string">!"</span></span>
+<span><span class="ln"> 9</span></span>
+<span><span class="ln">10</span>    <span class="function">puts</span> msg<span class="function">.upcase</span> <span class="keyword">if</span> <span class="variable">msg</span><span class="function">.length</span> <span class="operator">></span> <span class="numeric">20</span></span>
+<span><span class="ln">11</span></span>
+<span><span class="ln">12</span>    <span class="variable">msg</span></span>
+<span><span class="ln">13</span>  <span class="keyword">end</span></span>
+<span><span class="ln">14</span><span class="keyword">end</span></span>
+<span><span class="ln">15</span></span></code></pre>
     </div>
   </div>
 </section>

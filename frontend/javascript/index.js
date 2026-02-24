@@ -15,6 +15,25 @@ document.addEventListener("click", (e) => {
   })
 })
 
+// Before/After code tabs
+document.querySelectorAll(".code-tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    const tabs = tab.closest(".code-tabs").querySelectorAll(".code-tab")
+    tabs.forEach((t) => t.classList.remove("active"))
+    tab.classList.add("active")
+
+    const codeBefore = document.getElementById("code-before")
+    const codeAfter = document.getElementById("code-after")
+    if (tab.dataset.tab === "after") {
+      codeBefore.classList.add("hidden")
+      codeAfter.classList.remove("hidden")
+    } else {
+      codeAfter.classList.add("hidden")
+      codeBefore.classList.remove("hidden")
+    }
+  })
+})
+
 // Mobile nav toggle
 const navToggle = document.getElementById("nav-toggle")
 const navMobile = document.getElementById("navbar-mobile")
