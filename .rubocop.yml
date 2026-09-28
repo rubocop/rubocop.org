@@ -10,7 +10,3 @@ Lint/SuppressedException:
 Lint/MissingSuper:
   Exclude:
     - src/_components/**/*.rb
-
-Metrics/MethodLength:
-  Exclude:
-    - plugins/builders/tailwind_jit.rb

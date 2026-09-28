@@ -27,16 +27,14 @@ task :clean do
 end
 
 namespace :frontend do
-  desc 'Build the frontend with esbuild for deployment'
+  desc 'Build the frontend with Vite for deployment'
   task :build do
-    sh 'touch frontend/styles/jit-refresh.css'
-    sh 'npm run esbuild'
+    sh 'npm run build'
   end
 
-  desc 'Watch the frontend with esbuild during development'
+  desc 'Run the Vite dev server during development'
   task :dev do
-    sh 'touch frontend/styles/jit-refresh.css'
-    sh 'npm run esbuild-dev'
+    sh 'npm run dev'
   rescue Interrupt
   end
 end

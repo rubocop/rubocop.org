@@ -1,6 +1,6 @@
 # RuboCop Landing Page
 
-The landing page for [rubocop.org](https://rubocop.org), built with [Bridgetown](https://www.bridgetownrb.com/) and [Tailwind CSS](https://tailwindcss.com/).
+The landing page for [rubocop.org](https://rubocop.org), built with [Bridgetown](https://www.bridgetownrb.com/), [Tailwind CSS](https://tailwindcss.com/) and [Vite](https://vite.dev/).
 
 ## Prerequisites
 
@@ -14,17 +14,13 @@ The landing page for [rubocop.org](https://rubocop.org), built with [Bridgetown]
 bundle install && npm install
 ```
 
-Tailwind CSS was configured using [tailwindcss-automation](https://github.com/bridgetownrb/tailwindcss-automation).
-
 ## Development
 
 ```sh
 bin/bridgetown start
 ```
 
-Then visit [localhost:4000](http://localhost:4000).
-
-> **Note:** When adding new Tailwind utility classes in ERB templates, you may need to restart the server for the CSS to regenerate.
+Then visit [localhost:4000](http://localhost:4000). This also starts the Vite dev server on port 5173, which serves the frontend assets with hot reloading.
 
 ## Linting
 

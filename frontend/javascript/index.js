@@ -1,7 +1,7 @@
 import "$styles/index.css"
 
 // Import all JavaScript & CSS files from src/_components
-import components from "$components/**/*.{js,jsx,js.rb,css}"
+import.meta.glob("$components/**/*.{js,jsx,css}", { eager: true })
 
 // Copy-to-clipboard
 document.addEventListener("click", (e) => {

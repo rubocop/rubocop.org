@@ -25,8 +25,7 @@ Bridgetown.configure do |_config|
 
   # Optionally host your site off a path, e.g. /blog. If you set this option,
   # ensure you use the `relative_url` helper for all links and assets in your HTML.
-  # If you're using esbuild for frontend assets, edit `esbuild.config.js` to
-  # update `publicPath`.
+  # Vite reads the same `BASE_PATH` environment variable (see `vite.config.js`).
   #
   base_path ENV.fetch('BASE_PATH', '/')
 
