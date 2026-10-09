@@ -84,6 +84,8 @@ main {
   padding: 0 var(--gutter);
 }
 
+.wide { --page: 1480px; }
+
 /* the header line */
 
 .bar {

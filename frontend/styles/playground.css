@@ -1,0 +1,84 @@
+/* the playground (the editors themselves are styled in its JavaScript) */
+
+.pg { padding-bottom: 2rem; }
+.pg .page-head { padding: 1.6rem 0 1.1rem; }
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  height: max(30rem, calc(100vh - 13.5rem));
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.tabs {
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  height: 40px;
+  font: 500 12px/1 var(--mono);
+  font-stretch: 87.5%;
+}
+
+.tabs [role="tab"] { display: flex; align-items: center; padding: 0 .9rem; opacity: .6; }
+.tabs [role="tab"][aria-selected="true"] { opacity: 1; }
+.tabs .fill { flex: 1; }
+.tabs .act { padding: 0 .9rem; }
+
+.src { background: var(--paper); border: 1px solid var(--rule); }
+.src .tabs { border-bottom: 1px solid var(--rule); color: var(--ink); }
+
+.src .tabs input {
+  width: 11ch;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: inherit;
+  font: inherit;
+}
+
+.src .tabs input:focus { text-decoration: underline wavy var(--red); text-underline-offset: 4px; }
+
+.editor { position: relative; flex: 1; min-height: 0; }
+.editor > div { position: absolute; inset: 0; }
+
+.out .tabs { border-bottom: 1px solid var(--term-rule); }
+.out pre { flex: 1; overflow: auto; }
+.out .loc { cursor: pointer; }
+.out .loc:hover { text-decoration: underline wavy var(--red); }
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem 1.4rem;
+  padding: .55rem 0 0;
+  color: var(--ink-3);
+  font: 400 12px/1.5 var(--mono);
+  font-stretch: 87.5%;
+}
+
+.status .fill { flex: 1; }
+.status .link-button { color: var(--ink-2); }
+
+/* Syntax highlighting: CodeMirror's classHighlighter emits these classes. */
+.tok-keyword { color: var(--red-text); }
+.tok-string, .tok-string2 { color: var(--yaml-value); }
+.tok-comment { color: var(--ink-3); font-style: italic; }
+.tok-number, .tok-atom, .tok-bool { color: var(--hash); }
+.tok-variableName.tok-definition, .tok-typeName, .tok-className { font-weight: 600; }
+.tok-propertyName { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 960px) {
+  .split { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .pane.src { height: 26rem; }
+  .pane.out { min-height: 18rem; }
+  .out pre { white-space: pre; overflow-wrap: normal; }
+}

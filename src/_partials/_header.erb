@@ -12,6 +12,7 @@
     <nav aria-label="Main">
       <a href="<%= site.metadata.docs_url %>">docs</a>
       <a href="<%= relative_url "/cops/" %>"<%== ' aria-current="page"' if resource.data.nav == "cops" %>>cops</a>
+      <a class="opt" href="<%= relative_url "/playground/" %>"<%== ' aria-current="page"' if resource.data.nav == "playground" %>>playground</a>
       <a class="opt" href="<%= site.metadata.style_guide_url %>">style guide</a>
       <a class="opt" href="<%= relative_url "/#news" %>">news</a>
       <a href="<%= site.metadata.github_url %>">github<% if site.data.stars %><span class="star"><%= format("%.1fk", site.data.stars / 1000.0) %></span><% end %></a>

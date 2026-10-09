@@ -34,7 +34,7 @@ progress: true
         Latest release: <a href="<%= site.metadata.github_url %>/releases"><%= site.data.rubocop.version %></a>.
       <% end %>
       <br>
-      New here? <a href="<%= site.metadata.docs_url %>usage/getting_started.html">Getting started</a> takes five minutes.
+      New here? <a href="<%= site.metadata.docs_url %>usage/getting_started.html">Getting started</a> takes five minutes, or <a href="<%= relative_url "/playground/" %>">try it in your browser</a> first.
     </p>
   </div>
 
@@ -70,6 +70,7 @@ progress: true
     <p><code>rubocop -a</code> applies the corrections that can't change what your code does. <code>rubocop -A</code> goes further and applies the ones that might, so run it with your tests nearby.</p>
     <p>Want to look before you leap? <code>--diff</code> prints the patch and leaves your files alone. The <code>Layout</code> cops make RuboCop a formatter too, and <code>rubocop -x</code> runs just those.</p>
     <p class="more">
+      <a href="<%= relative_url "/playground/" %>">Try it on your own code &rarr;</a>
       <a href="<%= site.metadata.docs_url %>usage/autocorrect.html">How autocorrection works &rarr;</a>
     </p>
   </div>

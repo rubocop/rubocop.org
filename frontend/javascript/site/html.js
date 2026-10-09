@@ -4,4 +4,5 @@ export const escape = (text) =>
 
 // Escapes text and marks up its `code` the way RuboCop's messages do. The
 // browser's side of code_spans in plugins/builders/helpers.rb.
-export const withCode = (text) => escape(text).replace(/`([^`]+)`/g, "<code>$1</code>")
+export const withCode = (text, tag = "code") =>
+  escape(text).replace(/`([^`]+)`/g, tag === "code" ? "<code>$1</code>" : `<span class="${tag}">$1</span>`)

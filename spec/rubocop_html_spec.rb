@@ -43,6 +43,12 @@ RSpec.describe RubocopHTML do
 
       expect(html).to eq('<a href="/Style/Foo">Style/Foo</a>: and Not/ACop:')
     end
+
+    it 'marks locations after a colored file name' do
+      html = described_class.ansi("\e[36mexample.rb\e[0m:3:5: C: msg", locations: true)
+
+      expect(html).to include(':<span class="loc" data-line="3" data-col="5">3:5</span>: C: msg')
+    end
   end
 
   describe '.terminal' do

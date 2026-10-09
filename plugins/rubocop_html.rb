@@ -3,7 +3,9 @@
 require 'cgi/escape'
 
 # Renders what RuboCop prints as HTML: ANSI colors become classes, the --diff
-# patch gets colored and cop names link to their docs.
+# patch gets colored and cop names link to their docs. The builders use it at
+# build time, and the playground evaluates this same file inside ruby.wasm, so
+# it sticks to the standard library.
 module RubocopHTML
   DOCS_URL = 'https://docs.rubocop.org'
 
@@ -33,17 +35,18 @@ module RubocopHTML
   end
 
   # Formatter output, then the patch if there is one. The block maps a cop
-  # name to its docs URL, or nil to leave the name alone.
-  def terminal(text, &)
+  # name to its docs URL, or nil to leave the name alone. With locations,
+  # "file:line:col" positions become spans the playground can jump to.
+  def terminal(text, locations: false, &)
     report, patch = text.split(%r{(?=^--- a/)}, 2)
-    ansi(report.to_s, &) + (patch ? diff(patch) : '')
+    ansi(report.to_s, locations:, &) + (patch ? diff(patch) : '')
   end
 
-  def ansi(text, &)
+  def ansi(text, locations: false, &)
     active = []
     html = text.split(/(\e\[[\d;]*m)/).map do |part|
       codes = part[/\A\e\[([\d;]*)m\z/, 1]
-      next plain(part, &) unless codes
+      next plain(part, locations:, &) unless codes
 
       closing = '</span>' * active.size
       active = apply(active, codes)
@@ -80,9 +83,11 @@ module RubocopHTML
     end
   end
 
-  # Text between color codes.
-  def plain(text, &link)
+  # Text between color codes. A location follows the file name, which has a
+  # color of its own, so it starts its part.
+  def plain(text, locations: false, &link)
     html = CGI.escapeHTML(text)
+    html = html.sub(/\A:(\d+):(\d+)(?=: )/, ':<span class="loc" data-line="\1" data-col="\2">\1:\2</span>') if locations
     return html unless link
 
     html.gsub(COP_NAME) do |name|

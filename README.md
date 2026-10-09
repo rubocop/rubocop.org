@@ -2,7 +2,7 @@
 
 The landing page for [rubocop.org](https://rubocop.org), built with [Bridgetown](https://www.bridgetownrb.com/) and plain CSS.
 
-The site is meant to complement the [docs](https://docs.rubocop.org), not repeat them: a front page and an index of every cop.
+The site is meant to complement the [docs](https://docs.rubocop.org), not repeat them: a front page, an index of every cop, and a playground that runs RuboCop in the browser.
 
 ## Prerequisites
 
@@ -37,6 +37,7 @@ Most of what the site shows comes from RuboCop itself, at build time:
 
 - **The cop index** (`/cops/`) and the grid on the home page come from the cop registry of RuboCop and its official plugins, loaded from this site's bundle (`plugins/builders/cops.rb`).
 - **The terminal output** on the home page is RuboCop run on the small project in `demo/` (`plugins/builders/demo_runs.rb`). Change the files there and the examples follow.
+- **The playground** (`/playground/`) runs RuboCop on [ruby.wasm](https://github.com/ruby/ruby.wasm) in a web worker. The Ruby runtime is loaded from jsDelivr, and the build packs the RuboCop from this bundle, with its dependencies, into an archive next to the page (`plugins/builders/playground.rb`). The worker and the Ruby side of it live in `frontend/javascript/playground/`.
 - **News** combines the latest GitHub releases (`plugins/builders/github.rb`) with the RuboCop posts on [Meta Redux](https://metaredux.com) (`plugins/builders/news.rb`).
 
 `plugins/rubocop_html.rb` turns RuboCop's terminal output into HTML wherever the site shows it.

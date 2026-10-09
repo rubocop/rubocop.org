@@ -44,8 +44,8 @@ gem 'puma', '< 8'
 # gem "nokolexbor", "~> 0.6"
 
 # The site is built from RuboCop itself: the cop index reads the registry of
-# RuboCop and its official plugins, and the home page shows real runs.
-# Bumping these versions refreshes all of it.
+# RuboCop and its official plugins, the home page shows real runs, and the
+# playground ships this exact RuboCop. Bumping these versions refreshes all of it.
 gem 'rubocop', '~> 1.91', require: false
 
 group :test do
