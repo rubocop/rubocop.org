@@ -1,6 +1,8 @@
 import build from "./config/esbuild.defaults.js"
 
-const basePath = process.env.BASE_PATH || ""
+// rubocop.org itself builds with BASE_PATH=/, which would otherwise turn the
+// asset URLs into protocol-relative ones (//_bridgetown/...).
+const basePath = (process.env.BASE_PATH || "").replace(/\/+$/, "")
 
 /**
  * @typedef { import("esbuild").BuildOptions } BuildOptions
