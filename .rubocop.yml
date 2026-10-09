@@ -1,16 +1,23 @@
 ---
+plugins:
+  - rubocop-rspec
+
 AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
+  Exclude:
+    # Offends on purpose, for the examples on the home page.
+    - demo/**/*
 
 Lint/SuppressedException:
   Exclude:
     - Rakefile
 
-Lint/MissingSuper:
+Metrics/BlockLength:
   Exclude:
-    - src/_components/**/*.rb
+    - spec/**/*
 
-Metrics/MethodLength:
-  Exclude:
-    - plugins/builders/tailwind_jit.rb
+RSpec/ExampleLength:
+  CountAsOne:
+    - array
+    - heredoc

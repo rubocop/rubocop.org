@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="<%= site.locale %>">
   <head>
-    <%= render "head", metadata: site.metadata, title: data.title %>
+    <%= render "head", resource: resource %>
   </head>
-  <body class="<%= data.layout %> <%= data.page_class %>">
-    <%= render Shared::Navbar.new(metadata: site.metadata, resource: resource) %>
+  <body class="<%= data.page_class %>">
+    <%= render "header", resource: resource %>
 
-    <main>
+    <main class="<%= data.main_class %>">
       <%= yield %>
     </main>
 
-    <%= render "footer", metadata: site.metadata %>
+    <%= render "footer", resource: resource %>
   </body>
 </html>

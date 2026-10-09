@@ -1,0 +1,27 @@
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="<%= relative_url "/" %>">
+      <img class="logo-light" src="<%= relative_url "/images/rubo-logo-symbol.png" %>" alt="">
+      <img class="logo-dark" src="<%= relative_url "/images/rubo-logo-symbol-dark.png" %>" alt="">
+      rubocop
+    </a>
+    <span class="ver"><%= latest_release&.version || site.data.rubocop.version %></span>
+    <% if resource.data.progress %>
+      <span class="run" aria-hidden="true" title="sections inspected so far"></span>
+    <% end %>
+    <nav aria-label="Main">
+      <a href="<%= site.metadata.docs_url %>">docs</a>
+      <a href="<%= relative_url "/cops/" %>"<%== ' aria-current="page"' if resource.data.nav == "cops" %>>cops</a>
+      <a class="opt" href="<%= site.metadata.style_guide_url %>">style guide</a>
+      <a class="opt" href="<%= relative_url "/#news" %>">news</a>
+      <a href="<%= site.metadata.github_url %>">github<% if site.data.stars %><span class="star"><%= format("%.1fk", site.data.stars / 1000.0) %></span><% end %></a>
+      <a class="opt-sm" href="<%= relative_url "/#funding" %>">sponsor</a>
+      <button id="theme" type="button" data-mode="auto" title="Color theme: follows your system">
+        <svg class="i i-auto" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg>
+        <svg class="i i-light" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        <svg class="i i-dark" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor"/></svg>
+        <span class="label">auto</span>
+      </button>
+    </nav>
+  </div>
+</header>

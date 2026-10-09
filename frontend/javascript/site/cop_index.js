@@ -1,0 +1,77 @@
+// Filters for the cop index. Every cop is already in the page; this only hides
+// rows, and keeps the filters in the query string so a filtered view can be
+// linked to.
+const FIELDS = ["q", "plugin", "department", "status", "fix"]
+
+// "Style/*Literal*" works like a --show-cops pattern, anything else matches
+// names and descriptions.
+function matcher(query) {
+  const text = query.trim().toLowerCase()
+  if (!text) return () => true
+  if (text.includes("*")) {
+    const pattern = new RegExp(`^${text.split("*").map((part) => part.replace(/[.+?^${}()|[\]\\/]/g, "\\$&")).join(".*")}$`)
+    return (row) => pattern.test(row.name)
+  }
+  return (row) => row.name.includes(text) || row.text.includes(text)
+}
+
+export function setupCopIndex() {
+  const form = document.querySelector(".filters")
+  if (!form) return
+
+  const count = form.querySelector(".count")
+  const empty = document.querySelector(".no-match")
+  const groups = [...document.querySelectorAll(".dept-group")].map((element) => ({
+    element,
+    plugin: element.dataset.plugin,
+    department: element.dataset.department,
+    rows: [...element.querySelectorAll("li")].map((element) => ({
+      element,
+      name: element.querySelector(".name").textContent.toLowerCase(),
+      text: element.querySelector(".desc").textContent.toLowerCase(),
+      status: element.dataset.status,
+      fix: element.dataset.fix,
+    })),
+  }))
+  const total = groups.reduce((sum, group) => sum + group.rows.length, 0)
+
+  const params = new URLSearchParams(location.search)
+  for (const field of FIELDS) {
+    if (params.has(field)) form.elements[field].value = params.get(field)
+  }
+
+  let urlTimer
+  const apply = () => {
+    const values = Object.fromEntries(FIELDS.map((field) => [field, form.elements[field].value]))
+    const matches = matcher(values.q)
+    let shown = 0
+
+    for (const group of groups) {
+      const inGroup = (!values.plugin || group.plugin === values.plugin) && (!values.department || group.department === values.department)
+      let visible = 0
+      for (const row of group.rows) {
+        const show = inGroup && (!values.status || row.status === values.status) && (!values.fix || row.fix === values.fix) && matches(row)
+        if (row.element.hidden === show) row.element.hidden = !show
+        if (show) visible++
+      }
+      group.element.hidden = visible === 0
+      shown += visible
+    }
+
+    count.textContent = shown === total ? `${total.toLocaleString("en")} cops` : `${shown.toLocaleString("en")} of ${total.toLocaleString("en")}`
+    empty.hidden = shown > 0
+
+    // Safari throttles replaceState, so don't call it on every keystroke.
+    clearTimeout(urlTimer)
+    urlTimer = setTimeout(() => {
+      const query = new URLSearchParams(Object.entries(values).filter(([, value]) => value))
+      history.replaceState(null, "", `${location.pathname}${query.size ? `?${query}` : ""}${location.hash}`)
+    }, 400)
+  }
+
+  form.addEventListener("input", apply)
+  form.addEventListener("submit", (event) => event.preventDefault())
+  form.addEventListener("reset", () => setTimeout(apply))
+  form.hidden = false
+  apply()
+}

@@ -1,0 +1,10 @@
+---
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: enable
+  # The site's own bundle has plugins in it, which this project doesn't use.
+  SuggestExtensions: false
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false

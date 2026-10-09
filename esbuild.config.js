@@ -7,10 +7,7 @@ const basePath = process.env.BASE_PATH || ""
  * @type {BuildOptions}
  */
 const esbuildOptions = {
-  publicPath: `${basePath}/_bridgetown/static`,
-  globOptions: {
-    excludeFilter: /\.(dsd|lit)\.css$/
-  }
+  publicPath: `${basePath}/_bridgetown/static`
 }
 
 build(esbuildOptions)

@@ -1,213 +1,203 @@
 ---
 layout: default
+progress: true
 ---
+<%
+  release = latest_release
+  post = release && release_post(release)
+  runs = site.data.runs
+  grid = site.data.departments.select { |department| department[:plugin] == "rubocop" }.sort_by { |department| -department[:cops].size }
+  counts = grid.flat_map { |department| department[:cops] }.map { |cop| cop[:status] }.tally
+%>
+<section class="hero" data-sec>
+  <div>
+    <h1>
+      <img class="logo-light" src="<%= relative_url "/images/rubo-logo-horizontal.png" %>" alt="RuboCop" width="720" height="230">
+      <img class="logo-dark" src="<%= relative_url "/images/rubo-logo-horizontal-dark.png" %>" alt="RuboCop" width="720" height="230">
+    </h1>
+    <p class="comment"># <%= site.metadata.tagline %></p>
+    <p class="lede">RuboCop checks your Ruby code against the community <a href="<%= site.metadata.style_guide_url %>">Ruby Style Guide</a>, points out what's off and fixes most of it for you. It knows about bugs, style, layout and complexity, it bends to your team's taste, and it's been at it since 2012.</p>
 
-<!-- Hero -->
-<section class="text-center py-8 md:py-20 px-6 max-w-5xl md:mt-10 mx-auto">
-  <h1 class="text-3xl md:text-7xl font-heading font-extrabold text-heading mb-4 ">The <span class="text-accent">Ruby</span> <br class="hidden md:inline"/>Linter/Formatter that <br class="hidden lg:inline"/> Serves and Protects</h1>
-  <p class="text-lg text-muted max-w-xl mx-auto mb-10">RuboCop is a Ruby static code checker (linter) and formatter based on the community-driven <a class="text-accent hover:text-accent-hover" href="https://rubystyle.guide/">Ruby Style Guide</a></p>
-
-  <div class="flex items-center justify-center gap-4 flex-wrap mb-6">
-    <a href="https://docs.rubocop.org/rubocop/latest/usage/getting_started.html" class="inline-block bg-accent hover:bg-accent-hover text-white px-7 py-2.5 rounded-lg font-semibold transition-colors no-underline">Getting Started</a>
-    <div class="inline-flex items-center gap-2 bg-code-bg text-code-text px-4 py-3 rounded-lg font-mono text-sm">
-      <code>$ gem install rubocop</code>
-      <button class="copy-btn group relative bg-transparent border-none text-code-text/60 hover:text-code-text [&.copied]:text-code-text cursor-pointer p-0.5 transition-colors flex items-center" data-copy="gem install rubocop" aria-label="Copy to clipboard">
-        <%= svg "images/copy.svg", class: "size-4.5 group-[.copied]:hidden" %>
-        <%= svg "images/copy-check.svg", class: "size-4.5 hidden group-[.copied]:block" %>
-        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-200 text-black text-xs rounded-md whitespace-nowrap opacity-0 group-[.copied]:opacity-100 transition-opacity pointer-events-none">Copied to clipboard!</span>
-      </button>
-    </div>
-  </div>
-
-  <p class="text-sm text-muted mb-3"> If you'd rather install using <code class="bg-gray-100 px-1.5 py-0.5 rounded font-mono text-accent text-xs">bundler</code>, add a line for it in your <code class="bg-gray-100 px-1.5 py-0.5 rounded font-mono text-accent text-xs">Gemfile</code> <br/> (set the <code class="bg-gray-100 px-1.5 py-0.5 rounded font-mono text-accent text-xs">require</code> option to <code class="bg-gray-100 px-1.5 py-0.5 rounded font-mono text-accent text-xs">false</code>, as it is a standalone tool):</p>
-  <div class="inline-flex items-center gap-2 bg-code-bg text-code-text px-4 py-3 rounded-lg font-mono text-sm">
-    <code>gem 'rubocop', require: false</code>
-    <button class="copy-btn group relative bg-transparent border-none text-code-text/60 hover:text-code-text [&.copied]:text-code-text cursor-pointer p-0.5 transition-colors flex items-center" data-copy="gem 'rubocop', require: false" aria-label="Copy to clipboard">
-      <%= svg "images/copy.svg", class: "size-4.5 group-[.copied]:hidden" %>
-      <%= svg "images/copy-check.svg", class: "size-4.5 hidden group-[.copied]:block" %>
-      <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-200 text-black text-xs rounded-md whitespace-nowrap opacity-0 group-[.copied]:opacity-100 transition-opacity pointer-events-none">Copied to clipboard!</span>
-    </button>
-  </div>
-
-  <div class="mt-6">
-    <a href="<%= site.metadata.donate_url %>" class="text-md text-muted hover:text-accent no-underline inline-flex items-center gap-1 underline">Help fund the project <%= svg "images/heart-handshake.svg", class:"size-6" %></a>
-  </div>
-</section>
-
-<!-- Features + Code Example -->
-<section id="features" class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto px-6 py-8 md:py-16 border-y border-gray-200">
-  <div class="flex flex-col gap-6">
-    <div class="p-6 border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-      <h3 class="font-heading font-semibold text-lg text-heading mb-2">Find &amp; autocorrect offenses</h3>
-      <p class="text-muted text-sm leading-relaxed mb-3">Check and automatically fix offenses on your Ruby code based on the Ruby Community Style Guide.</p>
-      <a target="_blank" href="https://docs.rubocop.org/rubocop/latest/usage/autocorrect.html" class="inline-flex items-center gap-1 text-accent text-sm font-medium hover:text-accent-hover">Learn more <%= svg "images/external-link.svg", class:"inline size-4"%></a>
-    </div>
-
-    <div class="p-6 border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-      <h3 class="font-heading font-semibold text-lg text-heading mb-2">Configure cops</h3>
-      <p class="text-muted text-sm leading-relaxed mb-3">Edit the .rubocop.yml configuration file to enable/disable certain cops (checks) and alter their behavior.</p>
-      <a target="_blank" href="https://docs.rubocop.org/rubocop/latest/configuration.html" class="inline-flex items-center gap-1 text-accent text-sm font-medium hover:text-accent-hover">Learn more <%= svg "images/external-link.svg", class:"inline size-4"%></a>
-    </div>
-
-    <div class="p-6 border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-      <h3 class="font-heading font-semibold text-lg text-heading mb-2">Extend with plugins</h3>
-      <p class="text-muted text-sm leading-relaxed mb-3">Extend RuboCop with additional cops and formatters. There are many official and third-party extensions available.</p>
-      <a target="_blank" href="https://docs.rubocop.org/rubocop/latest/plugins.html" class="inline-flex items-center gap-1 text-accent text-sm font-medium hover:text-accent-hover">Learn more <%= svg "images/external-link.svg", class:"inline size-4"%></a>
-    </div>
-  </div>
-
-  <div class="flex items-center">
-    <div class="code-example flex flex-col h-full">
-      <div class="code-example-header">
-        <span class="code-dot bg-[#f38ba8]"></span>
-        <span class="code-dot bg-[#f9e2af]"></span>
-        <span class="code-dot bg-[#a6e3a1]"></span>
-        <span class="ml-2 font-mono text-xs text-gray-500">user_greeting.rb</span>
-        <div class="code-tabs ml-auto">
-          <button class="code-tab active" data-tab="before">Before</button>
-          <button class="code-tab" data-tab="after">After</button>
-        </div>
+    <div class="install">
+      <div class="install-tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-cmd="gem install rubocop" data-prompt="$" data-note="">gem</button>
+        <button type="button" role="tab" aria-selected="false" data-cmd="gem 'rubocop', require: false" data-prompt="#" data-note="In your Gemfile. RuboCop is a standalone tool, so nothing needs to require it.">bundler</button>
       </div>
-      <pre class="code-example-body grow" id="code-before"><code><span><span class="ln"> 1</span><span class="comment"># frozen_string_literal: true</span></span>
-<span><span class="ln"> 2</span></span>
-<span><span class="ln"> 3</span><span class="comment"># Manages user greeting logic</span></span>
-<span><span class="ln"> 4</span><span class="keyword">class</span> <span class="class">UserGreeting</span></span>
-<span><span class="ln"> 5</span>  <span class="keyword">def</span> <span class="offense" data-cop="Naming/MethodName" data-msg="Use snake_case for method names."><span class="function">sayHello</span></span><span class="brackets">(</span><span class="parameter">name</span><span class="brackets">)</span></span>
-<span><span class="ln"> 6</span>    <span class="offense" data-cop="Style/IfUnlessModifier" data-msg="Favor modifier if usage when having a single-line body. Another good alternative is the usage of control flow &&/||."><span class="keyword">if</span></span> <span class="parameter">name</span><span class="function">.nil?</span></span>
-<span><span class="ln"> 7</span>      <span class="parameter">name</span> <span class="operator">=</span> <span class="offense" data-cop="Style/StringLiterals" data-msg="Prefer single-quoted strings when you don't need string interpolation or special symbols."><span class="string">"stranger"</span></span></span>
-<span><span class="ln"> 8</span>    <span class="keyword">end</span></span>
-<span><span class="ln"> 9</span></span>
-<span><span class="ln">10</span>    msg = <span class="string">"Hello,</span> <span class="comment">#</span><span class="brackets">{</span><span class="parameter">name</span><span class="brackets">}</span><span class="string">!"</span></span>
-<span><span class="ln">11</span></span>
-<span><span class="ln">12</span>    <span class="offense" data-cop="Style/IfUnlessModifier" data-msg="Favor modifier if usage when having a single-line body. Another good alternative is the usage of control flow &&/||."><span class="keyword">if</span></span> <span class="variable">msg</span><span class="function">.length</span> <span class="operator">></span> <span class="numeric">20</span></span>
-<span><span class="ln">13</span>      <span class="function">puts</span> msg<span class="function">.upcase</span></span>
-<span><span class="ln">14</span>    <span class="keyword">end</span></span>
-<span><span class="ln">15</span></span>
-<span><span class="ln">16</span>    <span class="offense" data-cop="Style/RedundantReturn" data-msg="Redundant return detected."><span class="keyword">return</span></span> <span class="variable">msg</span></span>
-<span><span class="ln">17</span>  <span class="keyword">end</span></span>
-<span><span class="ln">18</span><span class="keyword">end</span></span>
-<span><span class="ln">19</span></span></code></pre>
-      <pre class="code-example-body grow hidden" id="code-after"><code><span><span class="ln"> 1</span><span class="comment"># frozen_string_literal: true</span></span>
-<span><span class="ln"> 2</span></span>
-<span><span class="ln"> 3</span><span class="comment"># Manages user greeting logic</span></span>
-<span><span class="ln"> 4</span><span class="keyword">class</span> <span class="class">UserGreeting</span></span>
-<span><span class="ln"> 5</span>  <span class="keyword">def</span> <span class="function">say_hello</span><span class="brackets">(</span><span class="parameter">name</span><span class="brackets">)</span></span>
-<span><span class="ln"> 6</span>    <span class="parameter">name</span> <span class="operator">=</span> <span class="string">'stranger'</span> <span class="keyword">if</span> <span class="parameter">name</span><span class="function">.nil?</span></span>
-<span><span class="ln"> 7</span></span>
-<span><span class="ln"> 8</span>    msg = <span class="string">"Hello,</span> <span class="comment">#</span><span class="brackets">{</span><span class="parameter">name</span><span class="brackets">}</span><span class="string">!"</span></span>
-<span><span class="ln"> 9</span></span>
-<span><span class="ln">10</span>    <span class="function">puts</span> msg<span class="function">.upcase</span> <span class="keyword">if</span> <span class="variable">msg</span><span class="function">.length</span> <span class="operator">></span> <span class="numeric">20</span></span>
-<span><span class="ln">11</span></span>
-<span><span class="ln">12</span>    <span class="variable">msg</span></span>
-<span><span class="ln">13</span>  <span class="keyword">end</span></span>
-<span><span class="ln">14</span><span class="keyword">end</span></span>
-<span><span class="ln">15</span></span></code></pre>
+      <div class="install-line"><span class="p">$</span><code>gem install rubocop</code><button type="button" class="copy link-button">copy</button></div>
     </div>
-  </div>
-</section>
+    <p class="install-note" id="install-note" hidden></p>
 
-<!--- Plugins -->
-<section id="plugins" class="flex-col py-8 md:pb-16 md:pt-12 px-6 mx-auto max-w-5xl border-b border-gray-200">
-  <h2 class="text-center font-heading text-3xl font-bold text-heading mb-8">Plugins</h2>
-  <div class="flex mx-auto items-center max-w-3xl">
-    <div class="code-example flex flex-col">
-      <div class="code-example-header">
-        <span class="code-dot bg-[#f38ba8]"></span>
-        <span class="code-dot bg-[#f9e2af]"></span>
-        <span class="code-dot bg-[#a6e3a1]"></span>
-        <span class="ml-2 font-mono text-xs text-gray-500">.rubocop.yml</span>
-      </div>
-      <pre class="code-example-body overflow-x-auto grow"><code><span><span class="ln">  1</span><span class="comment"># It's possible to extend RuboCop with additional cops and formatters.</span></span>
-<span><span class="ln">  2</span><span class="comment"># <a target="_blank" href="https://docs.rubocop.org/rubocop/latest/plugins.html">Learn more</a></span></span>
-<span><span class="ln">  3</span><span class="comment">#</span></span>
-<span><span class="ln">  4</span><span class="comment"># Official Extensions maintained by the RuboCop's team:</span></span>
-<span><span class="ln">  5</span><span class="comment"># (clicking on them leads to their GitHub repo)</span></span>
-<span><span class="ln">  6</span></span>
-<span><span class="ln">  7</span>---</span>
-<span><span class="ln">  8</span><span class="function">plugins:</span></span>
-<span><span class="ln">  9</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-performance">rubocop-performance</a></span>  <span class="comment"># Performance optimization analysis</span></span>
-<span><span class="ln"> 10</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rails">rubocop-rails</a></span>  <span class="comment"># Rails-specific analysis</span></span>
-<span><span class="ln"> 11</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rspec">rubocop-rspec</a></span>  <span class="comment"># Rspec-specific analysis</span></span>
-<span><span class="ln"> 12</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-minitest">rubocop-minitest</a></span>  <span class="comment"># Minitest-specific analysis</span></span>
-<span><span class="ln"> 13</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rake">rubocop-rake</a></span>  <span class="comment"># Rake-specific analysis</span></span>
-<span><span class="ln"> 14</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-sequel">rubocop-sequel</a></span>  <span class="comment"># Code style checking for Sequel gem</span></span>
-<span><span class="ln"> 15</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-thread_safety">rubocop-thread_safety</a></span>  <span class="comment"># Thread-safety analysis</span></span>
-<span><span class="ln"> 16</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-capybara">rubocop-capybara</a></span>  <span class="comment"># Capybara-specific analysis</span></span>
-<span><span class="ln"> 17</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-factory_bot">rubocop-factory_bot</a></span>  <span class="comment"># factory_bot-specific analysis</span></span>
-<span><span class="ln"> 18</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-rspec_rails">rubocop-rspec_rails</a></span>  <span class="comment"># RSpec Rails-specific analysis</span></span>
-<span><span class="ln"> 19</span>  - <span class="string link"><a target="_blank" href="https://github.com/rubocop/rubocop-i18n">rubocop-i18n</a></span>  <span class="comment"># i18n wrapper function analysis (gettext and rails-i18n)</span></span>
-<span><span class="ln"> 20</span></span>
-<span class="ln"> 21</span><span class="comment"># Third-party Plugins:</span></span>
-<span class="ln"> 22</span><span class="comment"># <a target="_blank" href="https://docs.rubocop.org/rubocop/latest/plugins.html#third-party-plugins">https://docs.rubocop.org/rubocop/latest/plugins.html#third-party-plugins</a></span></span>
-<span class="ln"> 23</span></span>
-
-</code></pre>
-    </div>
-  </div>
-</section>
-
-<!-- Stats -->
-<section id="stats" class="text-center py-8 md:py-16 px-6 mx-auto max-w-5xl border-b border-gray-200">
-  <h2 class="font-heading text-3xl font-semibold text-heading mb-10">The Ruby linter used by the community</h2>
-  <div class="flex justify-center gap-16 max-w-3xl mx-auto flex-wrap">
-    <div class="flex flex-col items-center">
-      <span class="font-heading text-4xl font-extrabold text-heading"><%= site.metadata.stats.downloads %></span>
-      <span class="text-m text-muted mt-1">Downloads</span>
-    </div>
-    <div class="flex flex-col items-center">
-      <span class="font-heading text-4xl font-extrabold text-heading"><%= site.metadata.stats.stars %></span>
-      <span class="text-m text-muted mt-1">GitHub Stars</span>
-    </div>
-    <div class="flex flex-col items-center">
-      <span class="font-heading text-4xl font-extrabold text-heading"><%= site.metadata.stats.cops %></span>
-      <span class="text-m text-muted mt-1">Cops</span>
-    </div>
-  </div>
-</section>
-
-<!-- Latest Releases -->
-<% unless site.data[:latest_releases]&.empty? %>
-<section id="releases" class="text-center py-8 md:py-16 px-6">
-  <h2 class="font-heading text-3xl font-bold text-heading mb-8">Latest Releases</h2>
-  <div class="flex justify-center max-w-4xl mx-auto flex-wrap gap-8 md:gap-0">
-    <% site.data[:latest_releases].each do |release| %>
-    <div class="flex flex-col items-center flex-1 min-w-[200px] max-w-xs">
-      <p class="font-heading text-2xl font-extrabold text-accent md:mb-2"><%= release[:tag] %></p>
-      <p class="text-lg text-heading mb-1"><%= release[:name] %></p>
-      <p class="text-sm text-muted mb-1"><%= release[:published_at] %></p>
-      <% unless release[:sections].empty? %>
-      <p class="text-sm text-muted mb-1 md:mb-4"><%= release[:sections].join(", ") %></p>
+    <p class="meta">
+      <% if release %>
+        Latest release: <a href="<%= release[:url] %>"><%= release[:version] %></a> (<%= release[:date].strftime("%-d %b %Y") %>)<% if post %>, and <a href="<%= post[:url] %>">the write-up</a><% end %>.
+      <% else %>
+        Latest release: <a href="<%= site.metadata.github_url %>/releases"><%= site.data.rubocop.version %></a>.
       <% end %>
-      <a target="_blank" href="<%= release[:url] %>" class="inline-flex items-center gap-1 text-accent text-sm font-medium hover:text-accent-hover">View on GitHub <%= svg "images/external-link.svg", class: "inline size-4" %></a>
+      <br>
+      New here? <a href="<%= site.metadata.docs_url %>usage/getting_started.html">Getting started</a> takes five minutes.
+    </p>
+  </div>
+
+  <div class="term" aria-label="RuboCop runs on a small project">
+    <%= terminal_tabs "run", "rubocop" => runs[:lint], "rubocop --diff" => runs[:diff], "rubocop -a" => runs[:fix] %>
+  </div>
+</section>
+
+<section class="s" id="cops" data-sec>
+  <div class="txt">
+    <h2>What it checks</h2>
+    <p>Every check is a <em>cop</em>, and cops live in departments. <code>Lint</code> catches code that's probably a bug, <code>Style</code>, <code>Layout</code> and <code>Naming</code> keep a codebase consistent, <code>Metrics</code> flags methods and classes that got too big, and <code>Security</code> spots the usual footguns.</p>
+    <p>Most cops come straight from a guideline in the style guide, and most of them can fix what they find.</p>
+    <p class="more"><a href="<%= relative_url "/cops/" %>">Browse all the cops &rarr;</a></p>
+  </div>
+  <div class="cops-grid" data-src="<%= relative_url "/cops.json" %>">
+    <div class="cops-head">Inspecting <%= counts.values.sum %> cops</div>
+    <% grid.each do |department| %>
+      <div class="dept" data-name="<%= department[:name] %>" data-fixable="<%= department[:cops].count { |cop| cop[:autocorrect] } %>">
+        <span class="dept-name"><a href="<%= department[:url] %>"><%= department[:name] %>/</a></span>
+        <span class="dept-n"><%= department[:cops].size %></span>
+        <span class="cells"><% department[:cops].each do |cop| %><a href="<%= cop[:url] %>" class="<%= cop[:status] %>" aria-label="<%= cop[:name] %>"></a><% end %></span>
+      </div>
+    <% end %>
+    <div class="legend"><span class="sq">on by default</span><span class="sq pending">pending (on in the next major release)</span><span class="sq disabled">opt-in</span></div>
+    <div class="readout" aria-live="polite">Each square is a cop. <%= counts["enabled"] %> are on by default, <%= counts["pending"] %> are pending until the next major release and <%= counts["disabled"] %> are opt-in. Hover one to see what it does.</div>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>What it fixes</h2>
+    <p><code>rubocop -a</code> applies the corrections that can't change what your code does. <code>rubocop -A</code> goes further and applies the ones that might, so run it with your tests nearby.</p>
+    <p>Want to look before you leap? <code>--diff</code> prints the patch and leaves your files alone. The <code>Layout</code> cops make RuboCop a formatter too, and <code>rubocop -x</code> runs just those.</p>
+    <p class="more">
+      <a href="<%= site.metadata.docs_url %>usage/autocorrect.html">How autocorrection works &rarr;</a>
+    </p>
+  </div>
+  <div class="term">
+    <%= terminal runs[:fix_all] %>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>Make it yours</h2>
+    <p>The defaults follow the style guide, but Ruby has never had one true style and RuboCop doesn't pretend otherwise. Most cops support several styles, and it's all set in a single <code>.rubocop.yml</code>, which can inherit from a shared one.</p>
+    <p>Adopting it on an old codebase? <code>rubocop --auto-gen-config</code> records every existing offense in <code>.rubocop_todo.yml</code>, so new code meets the standard today and the old debt gets paid off one cop at a time.</p>
+    <p>For real-world examples, see how <a href="https://github.com/rails/rails/blob/main/.rubocop.yml">Rails</a>, <a href="https://github.com/gitlabhq/gitlabhq/blob/master/.rubocop.yml">GitLab</a>, <a href="https://github.com/discourse/discourse/blob/main/.rubocop.yml">Discourse</a> and <a href="https://github.com/mastodon/mastodon/blob/main/.rubocop.yml">Mastodon</a> set it up.</p>
+    <p class="more"><a href="<%= site.metadata.docs_url %>configuration.html">Configuration &rarr;</a></p>
+  </div>
+  <div class="yaml">
+<pre><span class="y-c"># .rubocop.yml</span>
+<span class="y-k">inherit_from</span>: <span class="y-s">.rubocop_todo.yml</span>
+
+<span class="y-k">AllCops</span>:
+  <span class="y-k">TargetRubyVersion</span>: <span class="y-v">3.4</span>
+  <span class="y-k">NewCops</span>: <span class="y-v">enable</span>
+
+<span class="y-k">Style/StringLiterals</span>:
+  <span class="y-k">EnforcedStyle</span>: <span class="y-v">double_quotes</span>   <span class="y-c"># we know, we know</span>
+
+<span class="y-k">Metrics/MethodLength</span>:
+  <span class="y-k">Max</span>: <span class="y-v">15</span>
+  <span class="y-k">Exclude</span>:
+    - <span class="y-s">db/migrate/**/*</span></pre>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>Plugins</h2>
+    <p>The core knows Ruby. Plugins teach it about the frameworks and libraries around it. The RuboCop team maintains the ones on the right, and there are plenty more out there, from <code>rubocop-graphql</code> to <code>rubocop-sorbet</code>.</p>
+    <p>Writing your own cops is easier than it sounds, and a project can keep a few in-house cops for its own conventions.</p>
+    <p class="more"><a href="<%= site.metadata.docs_url %>plugins.html">All the plugins &rarr;</a></p>
+  </div>
+  <div class="yaml">
+    <% width = site.data.plugins.map { |plugin| plugin[:name].size }.max %>
+<pre><span class="y-k">plugins</span>:
+<% site.data.plugins.each do |plugin| %>  - <a class="y-s" href="https://github.com/rubocop/<%= plugin[:name] %>"><%= plugin[:name] %></a><%= " " * (width - plugin[:name].size) %>  <span class="y-c"># <%= plugin[:note] %></span>
+<% end %></pre>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>Where it runs</h2>
+    <p>On your machine, in your editor, in CI and, these days, inside your coding agent. The output fits wherever it ends up.</p>
+    <dl class="flags">
+      <dt>--lsp</dt><dd>A built-in language server: offenses as you type and format-on-save in VS Code, RubyMine, Emacs, Neovim, Helix, Zed and friends.</dd>
+      <dt>--format github</dt><dd>Offenses show up as annotations on pull requests. <code>sarif</code> feeds code scanning, <code>junit</code> the rest of CI.</dd>
+      <dt>--changed</dt><dd>Only looks at the files git says changed.</dd>
+      <dt>--mcp</dt><dd>Inspection and autocorrection for coding agents, over the Model Context Protocol.</dd>
+      <dt>--server</dt><dd>Keeps a warm process around, so runs start instantly.</dd>
+    </dl>
+  </div>
+  <div class="term">
+    <%= terminal_tabs "format", "-f offenses" => runs[:offenses], "-f worst" => runs[:worst], "-f github" => runs[:github], "-f json" => runs[:json] %>
+  </div>
+</section>
+
+<section class="s" id="news" data-sec>
+  <div class="txt">
+    <h2>News</h2>
+    <p>A new release lands every few weeks. The <a href="<%= site.metadata.changelog_url %>">changelog</a> has every detail, and the bigger ones get a write-up on <a href="https://metaredux.com/tags/#rubocop">Meta Redux</a>.</p>
+  </div>
+  <ul class="log news">
+    <% news.each do |item| %>
+      <li>
+        <span class="d"><%= item[:date].iso8601 %></span>
+        <% if item[:kind] == "post" %>
+          <span><a href="<%= item[:url] %>"><%= item[:title] %></a><span class="tag">post</span></span>
+        <% else %>
+          <span>
+            <a href="<%= item[:url] %>"><%= item[:version] %></a><span class="sum">: <%= item[:summary] %></span>
+            <% if item[:new_cops].any? %>
+              <br><span class="sum">new: <%== item[:new_cops].first(3).map { |name| cop_link(name) }.join(", ") %><%= ", ..." if item[:new_cops].size > 3 %></span>
+            <% end %>
+          </span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>History</h2>
+    <p>I started RuboCop in April 2012 to make it easy to actually follow the <a href="<%= site.metadata.style_guide_url %>">Ruby Style Guide</a>, which I'd started a few months earlier. Fourteen years, two parsers and over 1,100 contributors later, it's how a big chunk of the Ruby world keeps its code in shape.</p>
+    <p class="more"><a href="<%= site.metadata.docs_url %>about/history.html">The longer version &rarr;</a></p>
+  </div>
+  <ul class="log">
+    <% site.data.history.each do |event| %>
+      <li>
+        <% if event[:commit] %><a class="h" href="<%= event[:url] %>"><%= event[:commit] %></a><% else %><span class="h">-------</span><% end %>
+        <span class="d"><%= event[:date].iso8601 %></span>
+        <span><%= code_spans event[:text] %></span>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class="s full" id="funding" data-sec>
+  <div class="txt">
+    <h2>Who's behind it</h2>
+    <p>RuboCop is free and maintained by a small core team of volunteers, with help from thousands of contributors. If your company's code goes through RuboCop every day, consider giving something back. It's what keeps the lights on and the releases coming.</p>
+    <ul class="people">
+      <% site.data.team.each do |member| %>
+        <li><img src="https://github.com/<%= member[:github] %>.png?size=60" alt="" loading="lazy" width="30" height="30"><a href="https://github.com/<%= member[:github] %>"><%= member[:name] %></a></li>
+      <% end %>
+    </ul>
+    <div class="fund">
+      <a href="https://opencollective.com/rubocop"><b>Open Collective</b><span>The project's own fund, for individuals and companies.</span></a>
+      <a href="https://github.com/sponsors/bbatsov"><b>GitHub Sponsors</b><span>Sponsor the maintainers directly.</span></a>
+      <a href="https://tidelift.com/subscription/pkg/rubygems-rubocop"><b>Tidelift</b><span>For companies that want it on an invoice.</span></a>
     </div>
+    <% { "organization" => ["organizations backing RuboCop on Open Collective", 20], "individual" => ["and individuals", 30] }.each do |kind, (label, count)| %>
+      <p class="backers-label"># <%= label %></p>
+      <div class="backers <%= kind %>">
+        <% count.times do |i| %>
+          <a href="https://opencollective.com/rubocop/<%= kind %>/<%= i %>/website" rel="noopener"><img src="https://opencollective.com/rubocop/<%= kind %>/<%= i %>/avatar.svg" alt="" loading="lazy"></a>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </section>
-<% end %>
-
-<!-- Funding -->
-<section id="funding" class="text-center max-w-5xl mx-auto py-8 md:py-16 px-6 border-t border-gray-200">
-  <h2 class="font-heading text-3xl font-bold text-heading mb-6">Funding</h2>
-
-  <h3 class="font-heading text-lg font-semibold text-muted mb-6">Individuals</h3>
-  <div class="flex justify-center gap-4 max-w-4xl mx-auto flex-wrap mb-12">
-    <% 30.times do |i| %>
-    <a href="https://opencollective.com/rubocop/individual/<%= i %>/website" class="no-underline opacity-80 hover:opacity-100 transition-opacity" target="_blank" rel="noopener noreferrer">
-      <img src="https://opencollective.com/rubocop/individual/<%= i %>/avatar.svg" class="size-10 md:size-15 rounded-full" loading="lazy" />
-    </a>
-    <% end %>
-  </div>
-  
-  <h3 class="font-heading text-lg font-semibold text-muted mb-6">Organizations</h3>
-  <div class="justify-center max-w-5xl mx-auto mb-12 grid grid-cols-5">
-    <% 30.times do |i| %>
-    <a href="https://opencollective.com/rubocop/organization/<%= i %>/website" class="no-underline opacity-80 hover:opacity-100 transition-opacity" target="_blank" rel="noopener noreferrer">
-      <img src="https://opencollective.com/rubocop/organization/<%= i %>/avatar.svg" class="" loading="lazy" />
-    </a>
-    <% end %>
-  </div>
-
-  <a href="<%= site.metadata.donate_url %>" class="inline-block bg-accent hover:bg-accent-hover text-white px-7 py-2.5 rounded-lg font-semibold transition-colors no-underline">Become a Sponsor</a>
-</section>
-
-

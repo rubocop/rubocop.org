@@ -1,0 +1,86 @@
+# frozen_string_literal: true
+
+require 'cgi/escape'
+
+module Builders
+  # Helpers for the templates.
+  class Helpers < SiteBuilder
+    STATUS = { 'enabled' => 'on', 'pending' => 'pending', 'disabled' => 'opt-in' }.freeze
+    FIX = {
+      'safe' => ['-a', 'Fixed by rubocop -a'],
+      'unsafe' => ['-A', 'Fixed by rubocop -A, which may change behavior']
+    }.freeze
+    NEWS_ITEMS = 6
+
+    def build
+      %i[
+        code_spans delimited cop_link status_label fix_badge terminal terminal_tabs news latest_release release_post
+      ].each do |name|
+        helper name
+      end
+    end
+
+    # Escapes text and turns `backticks` into <code>, the way RuboCop's
+    # messages and the release notes mark up code.
+    def code_spans(text)
+      CGI.escapeHTML(text.to_s).gsub(/`([^`]+)`/, '<code>\1</code>').html_safe
+    end
+
+    # 1019 -> "1,019"
+    def delimited(number)
+      number.to_s.gsub(/(\d)(?=(\d{3})+\z)/, '\1,')
+    end
+
+    def cop_link(name)
+      url = site.data.cop_urls[name]
+      (url ? %(<a href="#{url}">#{CGI.escapeHTML(name)}</a>) : CGI.escapeHTML(name)).html_safe
+    end
+
+    def status_label(status) = STATUS.fetch(status)
+
+    def fix_badge(fix)
+      label, title = FIX[fix]
+      return '<span class="fx none" aria-hidden="true">-a</span>'.html_safe unless label
+
+      %(<span class="fx #{fix}" title="#{title}">#{label}</span>).html_safe
+    end
+
+    # A recorded run from the demo project: the prompt, then its output.
+    def terminal(run, id: nil, hidden: false)
+      attributes = [(%( id="#{id}") if id), (' hidden' if hidden)].join
+      prompt = %(<span class="pr">~/shop $ </span><span class="cmd">#{CGI.escapeHTML(run[:command])}</span>)
+      output = RubocopHTML.terminal(run[:output]) { |name| site.data.cop_urls[name] }
+      "<pre#{attributes}>#{prompt}\n#{output}</pre>".html_safe
+    end
+
+    # Several runs behind tabs, the first one showing. Keys are tab labels.
+    def terminal_tabs(prefix, runs)
+      buttons = runs.keys.each_with_index.map do |label, i|
+        %(<button type="button" role="tab" aria-selected="#{i.zero?}" data-out="#{prefix}-#{i}">#{label}</button>)
+      end
+      panes = runs.values.each_with_index.map { |run, i| terminal(run, id: "#{prefix}-#{i}", hidden: !i.zero?) }
+      %(<div class="term-tabs" role="tablist">#{buttons.join}</div>#{panes.join}).html_safe
+    end
+
+    # The latest releases and Meta Redux posts, newest first.
+    def news
+      releases = site.data.releases.map { |release| release.merge(kind: 'release') }
+      (releases + site.data.posts).sort_by { |item| item[:date] }.reverse.first(NEWS_ITEMS)
+    end
+
+    # The newest release on GitHub, skipping prereleases. GitHub lists them by
+    # date, so a backport can come after a newer release. This can be ahead of
+    # the bundled RuboCop (site.data.rubocop.version) until Gemfile.lock
+    # catches up.
+    def latest_release
+      site.data.releases.reject { |release| release[:prerelease] }.max_by { |release| Gem::Version.new(release[:version]) }
+    end
+
+    # The Meta Redux write-up for a release, if there is one. Its address ends
+    # in rubocop-1-91.html for 1.91.x.
+    def release_post(release)
+      slug = "rubocop-#{release[:version][/\A\d+\.\d+/].tr('.', '-')}"
+      site.data.posts.find { |post| post[:url].match?(%r{/#{slug}(?:\.html)?\z}) }
+    end
+  end
+end

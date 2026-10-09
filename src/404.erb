@@ -1,0 +1,36 @@
+---
+layout: default
+title: Page not found
+permalink: /404.html
+summary: 1 file inspected, 1 offense detected
+offended: true
+---
+<div class="page-head">
+  <h1>404</h1>
+  <p class="comment"># nothing lives at this address</p>
+</div>
+
+<div class="term not-found">
+<pre><span class="pr">~/rubocop.org $ </span><span class="cmd">rubocop <span id="missing-path">this/page</span></span>
+Inspecting 1 file
+<span class="t-r">F</span>
+
+Offenses:
+
+<span class="t-c" id="missing-file">this/page</span>:1:1: <span class="t-r">F</span>: Lint/PageNotFound: There's nothing here. It may have moved when the site was redone.
+^
+
+1 file inspected, <span class="t-r">1 offense</span> detected</pre>
+</div>
+
+<p class="more not-found-links">
+  <a href="<%= relative_url "/" %>">Home &rarr;</a>
+  <a href="<%= relative_url "/cops/" %>">All the cops &rarr;</a>
+  <a href="<%= site.metadata.docs_url %>">The docs &rarr;</a>
+</p>
+
+<script>
+  for (const id of ["missing-path", "missing-file"]) {
+    document.getElementById(id).textContent = location.pathname.replace(/^\//, "") || "index.html"
+  }
+</script>

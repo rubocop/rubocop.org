@@ -1,0 +1,37 @@
+---
+# Milestones for the git log on the home page. "commit" is the commit the
+# release was tagged on (or the first commit), "url" where the hash links to.
+- commit: afbead3
+  url: https://github.com/rubocop/rubocop/commit/afbead34d
+  date: 2012-04-21
+  text: Initial commit to rubocop.
+- commit: 237292d
+  url: https://github.com/rubocop/rubocop/releases/tag/v0.8.0
+  date: 2013-05-28
+  text: 0.8 moves onto the `parser` gem
+- commit: 453e12c
+  url: https://github.com/rubocop/rubocop/releases/tag/v0.9.0
+  date: 2013-07-01
+  text: 0.9 adds autocorrection and formatters
+- date: 2018-05-31
+  text: RuboCop moves to its own GitHub org (RubyKaigi 2018)
+- commit: f74c118
+  url: https://github.com/rubocop/rubocop/releases/tag/v1.0.0
+  date: 2020-10-21
+  text: 1.0, exactly 7.5 years after the first commit
+- commit: 80485d2
+  url: https://github.com/rubocop/rubocop/releases/tag/v1.53.0
+  date: 2023-06-23
+  text: 1.53 ships a built-in language server
+- commit: 96989aa
+  url: https://github.com/rubocop/rubocop/releases/tag/v1.72.0
+  date: 2025-02-14
+  text: 1.72 introduces the plugin system
+- commit: 9c2bc8e
+  url: https://github.com/rubocop/rubocop/releases/tag/v1.75.0
+  date: 2025-03-26
+  text: 1.75 makes Prism the default parser for Ruby 3.4+
+- commit: 6eee0af
+  url: https://github.com/rubocop/rubocop/releases/tag/v1.91.0
+  date: 2026-09-10
+  text: 1.91 starts the road to 2.0

@@ -1,0 +1,78 @@
+---
+layout: default
+title: Cops
+description: Every cop in RuboCop and its official plugins, with what it checks, whether it's on by default and whether it can fix what it finds.
+permalink: /cops/
+nav: cops
+---
+<% plugins = site.data.rubocop.plugins %>
+<div class="page-head">
+  <h1>Cops</h1>
+  <p class="comment"># <%= delimited site.data.cops.size %> cops: <%= site.data.departments.select { |d| d[:plugin] == "rubocop" }.sum { |d| d[:cops].size } %> in RuboCop <%= site.data.rubocop.version %>, the rest in its official plugins.</p>
+</div>
+
+<form class="filters" role="search" hidden>
+  <label class="query">
+    <span class="pr">$<span class="long"> rubocop --show-cops</span></span>
+    <input type="search" name="q" placeholder="Style/*Literal*, or a word from the description" autocomplete="off" spellcheck="false" aria-label="Search cops">
+    <span class="count" aria-live="polite"></span>
+  </label>
+  <div class="facets">
+    <label>from
+      <select name="plugin">
+        <option value="">anywhere</option>
+        <option value="rubocop">rubocop</option>
+        <% plugins.each_key do |plugin| %><option value="<%= plugin %>"><%= plugin %></option><% end %>
+      </select>
+    </label>
+    <label>department
+      <select name="department">
+        <option value="">any</option>
+        <% site.data.departments.each do |department| %><option value="<%= department[:name] %>"><%= department[:name] %></option><% end %>
+      </select>
+    </label>
+    <label>status
+      <select name="status">
+        <option value="">any</option>
+        <option value="enabled">on by default</option>
+        <option value="pending">pending</option>
+        <option value="disabled">opt-in</option>
+      </select>
+    </label>
+    <label>fixes
+      <select name="fix">
+        <option value="">any</option>
+        <option value="safe">with -a</option>
+        <option value="unsafe">with -A only</option>
+        <option value="none">doesn't autocorrect</option>
+      </select>
+    </label>
+    <button type="reset" class="link-button">clear</button>
+  </div>
+</form>
+
+<div class="cop-list">
+  <% site.data.departments.each do |department| %>
+    <section class="dept-group" id="<%= slugify department[:name] %>" data-plugin="<%= department[:plugin] %>" data-department="<%= department[:name] %>">
+      <h2>
+        <a href="<%= department[:url] %>"><%= department[:name] %></a>
+        <span class="n"><%= department[:cops].size %></span>
+        <% unless department[:plugin] == "rubocop" %><span class="from"><%= department[:plugin] %> <%= plugins[department[:plugin]] %></span><% end %>
+      </h2>
+      <ul>
+<% department[:cops].each do |cop| %><li data-status="<%= cop[:status] %>" data-fix="<%= cop[:autocorrect] || "none" %>"><a class="name" href="<%= cop[:url] %>"><%= cop[:name] %></a><span class="desc"><%= code_spans cop[:description] %></span><span class="tags"><span class="sq <%= cop[:status] %>"><%= status_label cop[:status] %></span><%= fix_badge cop[:autocorrect] %><span class="since"><%= cop[:added] %></span></span></li>
+<% end %>
+      </ul>
+    </section>
+  <% end %>
+  <p class="no-match" hidden>No cops match. Try fewer filters, or <code>*</code> as a wildcard.</p>
+</div>
+
+<p class="key">
+  <span><span class="sq enabled">on</span> by default</span>
+  <span><span class="sq pending">pending</span>: off until the next major release, or with <code>NewCops: enable</code></span>
+  <span><span class="sq disabled">opt-in</span>: off unless enabled</span>
+  <span><%= fix_badge "safe" %> fixed by <code>rubocop -a</code></span>
+  <span><%= fix_badge "unsafe" %> only by <code>rubocop -A</code></span>
+  <span>numbers: the version that added it</span>
+</p>

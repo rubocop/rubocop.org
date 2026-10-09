@@ -1,0 +1,157 @@
+/* the cop index */
+
+.filters {
+  position: sticky;
+  top: var(--bar-height);
+  z-index: 5;
+  padding: .9rem 0 1rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  font: 400 13px/1.4 var(--mono);
+  font-stretch: 87.5%;
+}
+
+.query {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .7rem .9rem;
+  background: var(--term);
+  color: var(--term-ink);
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.query .pr, .query .count { color: var(--term-dim); white-space: nowrap; }
+.query .pr { user-select: none; }
+
+.query input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  outline: none;
+  color: #fff;
+  font: inherit;
+  caret-color: var(--red);
+}
+
+.query input::placeholder { color: var(--term-dim); }
+
+.facets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem 1.2rem;
+  margin-top: .8rem;
+  color: var(--ink-2);
+}
+
+.facets label { display: inline-flex; align-items: center; gap: .45rem; }
+
+.facets select {
+  padding: .3rem 1.6rem .3rem .5rem;
+  background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238b8b85' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right .5rem center;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink);
+  font: inherit;
+  appearance: none;
+  cursor: pointer;
+}
+
+.facets select:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
+
+/* Most departments are off screen at first, so skip laying them out. */
+.dept-group {
+  padding-top: 1.6rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1500px;
+}
+
+.dept-group h2 {
+  display: flex;
+  align-items: baseline;
+  gap: .8rem;
+  margin: 0 0 .4rem;
+  font-size: 17px;
+}
+
+.dept-group h2 .n, .dept-group h2 .from {
+  color: var(--ink-3);
+  font-size: 12px;
+  font-weight: 400;
+  font-stretch: 87.5%;
+}
+
+.cop-list ul { margin: 0; padding: 0; list-style: none; }
+
+.cop-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr) auto;
+  gap: .3rem 1.6rem;
+  align-items: baseline;
+  padding: .5rem 0;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.cop-list .name {
+  font: 500 13.5px/1.5 var(--mono);
+  font-stretch: 87.5%;
+  overflow-wrap: anywhere;
+}
+
+.cop-list .desc { color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+.cop-list .desc code { background: var(--paper-2); padding: .05em .3em; border-radius: 3px; }
+
+.cop-list .tags, .key {
+  font: 400 12px/1 var(--mono);
+  font-stretch: 87.5%;
+  color: var(--ink-3);
+}
+
+.cop-list .tags {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  white-space: nowrap;
+}
+
+.cop-list .sq { min-width: 5.2rem; }
+
+.fx {
+  min-width: 1.6rem;
+  padding: .15rem .3rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.fx.unsafe { border-style: dashed; }
+.fx.none { visibility: hidden; }
+.since { min-width: 3.4rem; text-align: right; }
+
+.no-match { padding: 2rem 0; color: var(--ink-3); font: 400 14px/1.6 var(--mono); }
+
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.4rem;
+  margin: 2rem 0 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 860px) {
+  .cop-list li { grid-template-columns: minmax(0, 1fr) auto; }
+  .cop-list .desc { grid-column: 1 / -1; grid-row: 2; }
+}
+
+/* On phones the name gets a line of its own, then the tags, then what it does. */
+@media (max-width: 640px) {
+  .cop-list li { grid-template-columns: minmax(0, 1fr); }
+  .cop-list .tags { grid-row: 2; }
+  .cop-list .desc { grid-row: 3; }
+  .cop-list .sq { min-width: 0; }
+}

@@ -1,17 +1,13 @@
 ---
 title: RuboCop
-tagline: The Ruby Linter/Formatter that Serves and Protects
+tagline: The Ruby linter and formatter that serves and protects
 description: >-
-  RuboCop is a Ruby static code style checker (linter)
-  and formatter based on the community-driven
+  RuboCop is a Ruby linter and code formatter based on the community
   Ruby Style Guide.
-team_url: https://docs.rubocop.org/rubocop/latest/about/team.html
-docs_url: https://docs.rubocop.org
+docs_url: https://docs.rubocop.org/rubocop/latest/
 github_url: https://github.com/rubocop/rubocop
 style_guide_url: https://rubystyle.guide
+team_url: https://docs.rubocop.org/rubocop/latest/about/team.html
+logo_page_url: https://docs.rubocop.org/rubocop/latest/about/logo.html
+changelog_url: https://docs.rubocop.org/rubocop/latest/about/changelog.html
 donate_url: https://opencollective.com/rubocop
-logo_url: https://raw.githubusercontent.com/rubocop/rubocop/master/logo/rubo-logo-horizontal.png  # yamllint disable-line rule:line-length
-stats:
-  downloads: "640M+"
-  stars: "12.8k+"
-  cops: "580+"

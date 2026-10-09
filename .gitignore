@@ -42,4 +42,3 @@ yarn-debug.log*
 !/tmp/pids/
 !/tmp/pids/.keep
 
-frontend/styles/jit-refresh.css

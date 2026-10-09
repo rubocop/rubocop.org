@@ -1,0 +1,4 @@
+---
+permalink: /cops.json
+---
+<%== JSON.generate(site.data.cops.map { |cop| cop.slice(:name, :department, :plugin, :status, :autocorrect, :added, :description, :url) }) %>

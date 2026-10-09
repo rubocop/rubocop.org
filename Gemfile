@@ -43,6 +43,22 @@ gem 'puma', '< 8'
 # Or for faster parsing of HTML-only resources via Inspectors, use Nokolexbor:
 # gem "nokolexbor", "~> 0.6"
 
-gem 'bridgetown-svg-inliner', '~> 3.0'
+# The site is built from RuboCop itself: the cop index reads the registry of
+# RuboCop and its official plugins, and the home page shows real runs.
+# Bumping these versions refreshes all of it.
+gem 'rubocop', '~> 1.91', require: false
 
-gem 'rubocop', '~> 1.84', require: false
+group :test do
+  gem 'rspec', require: false
+end
+
+group :plugins do
+  gem 'rubocop-capybara', require: false
+  gem 'rubocop-factory_bot', require: false
+  gem 'rubocop-minitest', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'rubocop-rspec_rails', require: false
+  gem 'rubocop-thread_safety', require: false
+end

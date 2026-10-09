@@ -1,0 +1,24 @@
+---
+# The plugins maintained by the RuboCop team, for the plugins section.
+- name: rubocop-performance
+  note: faster idioms
+- name: rubocop-rails
+  note: Rails best practices
+- name: rubocop-rspec
+  note: RSpec
+- name: rubocop-rspec_rails
+  note: RSpec + Rails
+- name: rubocop-minitest
+  note: Minitest
+- name: rubocop-capybara
+  note: Capybara
+- name: rubocop-factory_bot
+  note: factory_bot
+- name: rubocop-rake
+  note: Rakefiles
+- name: rubocop-thread_safety
+  note: thread safety
+- name: rubocop-sequel
+  note: Sequel
+- name: rubocop-i18n
+  note: gettext and rails-i18n

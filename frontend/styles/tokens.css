@@ -1,0 +1,46 @@
+/* Colors come from the logo (helmet black, visor red) and from RuboCop's own
+   terminal output, which is where the severity colors are borrowed from.
+   Each one is light-dark(light, dark); the theme toggle sets color-scheme. */
+
+:root {
+  color-scheme: light dark;
+
+  --paper: light-dark(#f5f5f2, #0f0f10);
+  --paper-2: light-dark(#ebebe6, #19191b);
+  --ink: light-dark(#151515, #e8e8e3);
+  --ink-2: light-dark(#4c4c48, #a7a7a0);
+  --ink-3: light-dark(#8b8b85, #6b6b66);
+  --rule: light-dark(#d6d6cf, #2b2b2e);
+  --red: light-dark(#eb1c23, #ff2a31);
+  --red-text: light-dark(#c0151b, #ff5a60);
+  --link-line: color-mix(in srgb, var(--red) 45%, transparent);
+  --ok: light-dark(#3e9a33, #86cf72);
+  --yaml-value: light-dark(#2c7a6b, #7fc8b8);
+  --hash: light-dark(#b08a1e, #e7c45e);
+  --magenta-text: light-dark(#b04ab0, #d98bd6);
+  --cell-on: light-dark(#151515, #e8e8e3);
+  --cell-off: light-dark(#cfcfc8, #333336);
+
+  /* the terminal stays dark in both themes */
+  --term: light-dark(#141415, #19191b);
+  --term-edge: light-dark(#141415, #2b2b2e);
+  --term-ink: #dcdcd6;
+  --term-dim: #85857e;
+  --term-rule: #2c2c2f;
+  --t-yellow: #e7c45e;
+  --t-magenta: #d98bd6;
+  --t-red: #ff6166;
+  --t-green: #86cf72;
+  --t-cyan: #73c4d4;
+  --t-add: #9edb8b;
+  --t-del: #ff8a8e;
+
+  --sans: "Martian Grotesk", system-ui, sans-serif;
+  --mono: "Martian Mono", ui-monospace, monospace;
+  --page: 1180px;
+  --gutter: 1.25rem;
+  --bar-height: 52px;
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
