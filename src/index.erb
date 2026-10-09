@@ -191,11 +191,12 @@ progress: true
       <a href="https://github.com/sponsors/bbatsov"><b>GitHub Sponsors</b><span>Sponsor the maintainers directly.</span></a>
       <a href="https://tidelift.com/subscription/pkg/rubygems-rubocop"><b>Tidelift</b><span>For companies that want it on an invoice.</span></a>
     </div>
-    <% { "organization" => ["organizations backing RuboCop on Open Collective", 20], "individual" => ["and individuals", 30] }.each do |kind, (label, count)| %>
+    <% { organizations: "organizations backing RuboCop on Open Collective", individuals: "and individuals" }.each do |kind, label| %>
+      <% next if site.data.backers[kind].to_a.empty? %>
       <p class="backers-label"># <%= label %></p>
       <div class="backers <%= kind %>">
-        <% count.times do |i| %>
-          <a href="https://opencollective.com/rubocop/<%= kind %>/<%= i %>/website" rel="noopener"><img src="https://opencollective.com/rubocop/<%= kind %>/<%= i %>/avatar.svg" alt="" loading="lazy"></a>
+        <% site.data.backers[kind].each do |backer| %>
+          <a href="<%= backer[:url] %>" rel="noopener" title="<%= backer[:name] %>"><img src="<%= backer[:image] %>" alt="<%= backer[:name] %>" loading="lazy" width="36" height="36"></a>
         <% end %>
       </div>
     <% end %>

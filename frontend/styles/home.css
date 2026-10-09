@@ -211,8 +211,8 @@ dl.flags dd {
   opacity: .85;
 }
 
-.backers.organization { gap: 10px 18px; }
-.backers.organization img { width: auto; height: 36px; border-radius: 4px; background: none; }
+.backers.organizations { gap: 10px 18px; }
+.backers.organizations img { width: auto; height: 36px; border-radius: 4px; }
 .backers a:hover img { filter: none; opacity: 1; }
 
 @media (max-width: 960px) {
