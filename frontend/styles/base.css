@@ -28,11 +28,11 @@ a:hover {
 }
 
 /* Links that only get underlined on hover, in the base link's wavy red. */
-:is(.bar nav, .term, .yaml, .foot nav, .log, .people, .dept-name, .cop-list, .page-head) a {
+:is(.bar nav, .term, .foot nav, .log, .people, .dept-name, .cop-list, .page-head) a {
   text-decoration-line: none;
 }
 
-:is(.bar nav, .term, .yaml, .foot nav, .log, .people, .dept-name, .cop-list, .page-head) a:hover {
+:is(.bar nav, .term, .foot nav, .log, .people, .dept-name, .cop-list, .page-head) a:hover {
   text-decoration-line: underline;
 }
 

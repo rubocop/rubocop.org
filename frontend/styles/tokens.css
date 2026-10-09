@@ -1,6 +1,7 @@
 /* Colors come from the logo (helmet black, visor red) and from RuboCop's own
    terminal output, which is where the severity colors are borrowed from.
-   Each one is light-dark(light, dark); the theme toggle sets color-scheme. */
+   Each one is light-dark(light, dark); the theme toggle sets color-scheme.
+   Text colors keep 4.5:1 contrast on both paper shades (WCAG AA). */
 
 :root {
   color-scheme: light dark;
@@ -9,15 +10,15 @@
   --paper-2: light-dark(#ebebe6, #19191b);
   --ink: light-dark(#151515, #e8e8e3);
   --ink-2: light-dark(#4c4c48, #a7a7a0);
-  --ink-3: light-dark(#8b8b85, #6b6b66);
+  --ink-3: light-dark(#686862, #85857f);
   --rule: light-dark(#d6d6cf, #2b2b2e);
   --red: light-dark(#eb1c23, #ff2a31);
   --red-text: light-dark(#c0151b, #ff5a60);
   --link-line: color-mix(in srgb, var(--red) 45%, transparent);
-  --ok: light-dark(#3e9a33, #86cf72);
-  --yaml-value: light-dark(#2c7a6b, #7fc8b8);
-  --hash: light-dark(#b08a1e, #e7c45e);
-  --magenta-text: light-dark(#b04ab0, #d98bd6);
+  --ok: light-dark(#2c7625, #86cf72);
+  --yaml-value: light-dark(#286f61, #7fc8b8);
+  --hash: light-dark(#7f6410, #e7c45e);
+  --magenta-text: light-dark(#9c3f9c, #d98bd6);
   --cell-on: light-dark(#151515, #e8e8e3);
   --cell-off: light-dark(#cfcfc8, #333336);
 

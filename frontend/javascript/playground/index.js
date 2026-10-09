@@ -80,7 +80,7 @@ const theme = EditorView.theme({
   ".cm-severity .cm-gutterElement": { width: "1.6em", paddingLeft: ".4rem", textAlign: "center", fontWeight: "700", fontSize: "11px" },
   ".sev-C": { color: "var(--hash)" },
   ".sev-W": { color: "var(--magenta-text)" },
-  ".sev-E, .sev-F": { color: "var(--red)" },
+  ".sev-E, .sev-F": { color: "var(--red-text)" },
   ".sev-R, .sev-I": { color: "var(--ink-3)" },
   ".cm-tooltip": {
     maxWidth: "34rem",
