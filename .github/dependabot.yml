@@ -1,0 +1,21 @@
+---
+version: 2
+updates:
+  # New RuboCop releases reach the site through these updates: the cop index,
+  # the runs on the home page and the playground all come from the bundle.
+  - package-ecosystem: bundler
+    directory: /
+    schedule:
+      interval: daily
+    groups:
+      rubocop:
+        patterns:
+          - "rubocop*"
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

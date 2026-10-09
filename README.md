@@ -42,7 +42,7 @@ Most of what the site shows comes from RuboCop itself, at build time:
 
 `plugins/rubocop_html.rb` turns RuboCop's terminal output into HTML wherever the site shows it.
 
-So a new RuboCop release reaches the site by bumping the gems in `Gemfile.lock`.
+So a new RuboCop release reaches the site by bumping the gems in `Gemfile.lock`, which Dependabot does.
 
 The core team, the history log and the plugin list are plain data in `src/_data/`.
 
@@ -50,6 +50,6 @@ The fonts are Martian Grotesk and Martian Mono by Evil Martians, under the SIL O
 
 ## Deployment
 
-The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). On every push to the `main` branch, the workflow builds the site with `bin/bridgetown deploy` and deploys the `output/` directory.
+The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy` and deploys the `output/` directory on every push to `main`, once a week (to pick up new releases and posts), and on a `rubocop-release` repository dispatch.
 
 The workflow automatically sets `BASE_PATH` based on the repository. Forks get `/rubocop.org` so the site works at `<username>.github.io/rubocop.org/`, while the main repo uses `/` for the `rubocop.org` custom domain.

@@ -5,6 +5,17 @@ name: Deploy to GitHub pages
   push:
     branches:
       - main
+  # The site shows live data (releases, stars, posts), so rebuild it weekly
+  # and whenever a RuboCop release asks for it.
+  schedule:
+    - cron: "17 5 * * 1"
+  repository_dispatch:
+    types: [rubocop-release]
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -31,6 +42,9 @@ jobs:
 
       - name: Build
         run: bin/bridgetown deploy
+        env:
+          # avoids the anonymous rate limit of the GitHub API
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v4
