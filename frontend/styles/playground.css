@@ -27,8 +27,9 @@
   font-stretch: 87.5%;
 }
 
-.tabs [role="tab"] { display: flex; align-items: center; padding: 0 .9rem; opacity: .6; }
-.tabs [role="tab"][aria-selected="true"] { opacity: 1; }
+.tabs [role="tablist"] { display: flex; }
+.tabs :is([role="tab"], .tab) { display: flex; align-items: center; padding: 0 .9rem; opacity: .6; }
+.tabs :is([aria-selected="true"], [aria-current="true"]) { opacity: 1; }
 .tabs .fill { flex: 1; }
 .tabs .act { padding: 0 .9rem; }
 

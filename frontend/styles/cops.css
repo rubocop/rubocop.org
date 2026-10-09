@@ -61,8 +61,6 @@
   cursor: pointer;
 }
 
-.facets select:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
-
 /* Most departments are off screen at first, so skip laying them out. */
 .dept-group {
   padding-top: 1.6rem;

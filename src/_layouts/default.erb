@@ -4,9 +4,10 @@
     <%= render "head", resource: resource %>
   </head>
   <body class="<%= data.page_class %>">
+    <a class="skip" href="#main">Skip to content</a>
     <%= render "header", resource: resource %>
 
-    <main class="<%= data.main_class %>">
+    <main id="main" class="<%= data.main_class %>">
       <%= yield %>
     </main>
 

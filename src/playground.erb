@@ -22,30 +22,35 @@ main_class: pg
 
   <div class="split">
     <section class="pane src" aria-label="Input">
-      <div class="tabs" role="tablist">
-        <span class="tab" role="tab" aria-selected="true" data-pane="ed-code"><input id="file" value="example.rb" spellcheck="false" aria-label="File name" title="Rename the file: some cops care (try Gemfile)"></span>
-        <button type="button" role="tab" aria-selected="false" data-pane="ed-config">.rubocop.yml</button>
+      <%# Not a tablist: the code's "tab" is the file name, which you can edit. %>
+      <div class="tabs">
+        <span class="tab" data-pane="ed-code" aria-current="true"><input id="file" value="example.rb" spellcheck="false" aria-label="File name" aria-controls="ed-code" title="Rename the file: some cops care (try Gemfile)"></span>
+        <button type="button" class="tab" data-pane="ed-config" aria-current="false" aria-controls="ed-config">.rubocop.yml</button>
         <span class="fill"></span>
         <button class="act link-button" id="reset" type="button" title="Back to the example">reset</button>
       </div>
       <div class="editor" id="ed-code"></div>
       <div class="editor" id="ed-config" hidden></div>
+      <p class="sr-only" id="editor-help">Tab indents. Press Escape, then Tab, to move out of the editor.</p>
     </section>
 
     <section class="pane out term" aria-label="RuboCop output">
-      <div class="tabs" role="tablist">
-        <button type="button" role="tab" aria-selected="true" data-mode="lint">rubocop</button>
-        <button type="button" role="tab" aria-selected="false" data-mode="diff"><span class="long">rubocop&nbsp;</span>-a<span class="long">&nbsp;--diff</span></button>
-        <button type="button" role="tab" aria-selected="false" data-mode="diff-all"><span class="long">rubocop&nbsp;</span>-A<span class="long">&nbsp;--diff</span></button>
+      <div class="tabs">
+        <div role="tablist" aria-label="Command">
+          <button type="button" role="tab" aria-selected="true" aria-controls="output" data-mode="lint">rubocop</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="output" data-mode="diff"><span class="long">rubocop&nbsp;</span>-a<span class="long">&nbsp;--diff</span></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="output" data-mode="diff-all"><span class="long">rubocop&nbsp;</span>-A<span class="long">&nbsp;--diff</span></button>
+        </div>
         <span class="fill"></span>
         <button class="act link-button" id="apply" type="button" hidden>apply</button>
       </div>
-      <pre id="output" aria-live="polite"><noscript>The playground runs RuboCop with JavaScript and WebAssembly, so it needs both.</noscript></pre>
+      <pre id="output" role="tabpanel" aria-label="RuboCop output" tabindex="0"><noscript>The playground runs RuboCop with JavaScript and WebAssembly, so it needs both.</noscript></pre>
     </section>
   </div>
 
   <div class="status">
     <span id="state">loading</span>
+    <span class="sr-only" id="announce" role="status"></span>
     <span class="fill"></span>
     <button id="share" type="button" class="link-button">copy link</button>
     <a href="https://github.com/rubocop/rubocop.org/issues/new">report a problem</a>

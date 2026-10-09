@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require 'bridgetown'
+require_relative '../../plugins/rubocop_html'
 require_relative '../../plugins/site_builder'
 require_relative '../../plugins/builders/helpers'
 
 RSpec.describe Builders::Helpers do
   subject(:helpers) do
     described_class.allocate.tap do |builder|
-      data = HashWithDotAccess::Hash.new(releases:, posts:)
+      data = HashWithDotAccess::Hash.new(releases:, posts:, cop_urls: {})
       builder.define_singleton_method(:site) { Struct.new(:data).new(data) }
     end
   end
@@ -41,6 +42,20 @@ RSpec.describe Builders::Helpers do
 
     it "doesn't take a post that only mentions the version" do
       expect(helpers.release_post(release('2.0.0'))).to be_nil
+    end
+  end
+
+  describe '#terminal_tabs' do
+    let(:runs) do
+      { 'rubocop' => { command: 'rubocop', output: '' }, 'rubocop -a' => { command: 'rubocop -a', output: '' } }
+    end
+
+    it 'ties each tab to its panel and shows the first one', :aggregate_failures do
+      html = helpers.terminal_tabs('run', runs)
+
+      expect(html).to include('role="tab" id="run-tab-1" aria-selected="false" aria-controls="run-1">rubocop -a<')
+      expect(html).to include('<pre id="run-0" role="tabpanel" aria-labelledby="run-tab-0" tabindex="0">')
+      expect(html).to include('<pre id="run-1" role="tabpanel" aria-labelledby="run-tab-1" tabindex="0" hidden="true">')
     end
   end
 end

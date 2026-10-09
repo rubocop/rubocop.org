@@ -44,6 +44,7 @@ const RANK = Object.keys(SEVERITIES)
 const page = document.getElementById("playground")
 const output = document.getElementById("output")
 const state = document.getElementById("state")
+const announcer = document.getElementById("announce")
 const fileInput = document.getElementById("file")
 const applyButton = document.getElementById("apply")
 
@@ -156,7 +157,7 @@ function diagnostics(offenses, doc) {
   })
 }
 
-function editor(parent, doc, language) {
+function editor(parent, doc, language, label) {
   return new EditorView({
     parent,
     state: EditorState.create({
@@ -169,6 +170,7 @@ function editor(parent, doc, language) {
         keymap.of([...defaultKeymap, ...historyKeymap, indentWithTab]),
         StreamLanguage.define(language), syntaxHighlighting(classHighlighter),
         EditorView.updateListener.of((update) => { if (update.docChanged) schedule() }),
+        EditorView.contentAttributes.of({ "aria-label": label, "aria-describedby": "editor-help" }),
       ],
     }),
   })
@@ -179,8 +181,16 @@ function replace(view, text) {
 }
 
 function showPane(id) {
-  selectTab(document.querySelector(`.src [data-pane="${id}"]`))
+  for (const tab of document.querySelectorAll(".src [data-pane]")) tab.setAttribute("aria-current", tab.dataset.pane === id)
   for (const pane of document.querySelectorAll(".src .editor")) pane.hidden = pane.id !== id
+}
+
+// The status line under the editors. Screen readers hear `spoken` instead,
+// and only when it changes, so a run reads out its offense count rather than
+// the timing or the whole output.
+function setStatus(text, spoken = text) {
+  state.textContent = text
+  if (announcer.textContent !== spoken) announcer.textContent = spoken
 }
 
 function selectMode(next) {
@@ -220,11 +230,11 @@ function onMessage({ data }) {
       `Fetching Ruby ${escape(rubyVersion)} (wasm) and RuboCop\n` +
       `<span class="t-d">[</span><span class="t-g">${bar}</span><span class="t-d">]</span> ${data.percent}%`
   } else if (data.type === "status") {
-    state.textContent = `${data.text}...`
+    setStatus(`${data.text}...`)
   } else if (data.type === "ready") {
     ready = true
     rubyVersion = data.ruby
-    state.textContent = `RuboCop ${data.version} on Ruby ${rubyVersion} (wasm), ready in ${(data.ms / 1000).toFixed(1)}s`
+    setStatus(`RuboCop ${data.version} on Ruby ${rubyVersion} (wasm), ready in ${(data.ms / 1000).toFixed(1)}s`)
     schedule(0)
   } else if (pending.has(data.id)) {
     settle(data.id, data)
@@ -260,13 +270,13 @@ function showOutput({ command, notes = [], html = "", errors = "" }) {
 
 function showError(message) {
   showOutput({ command: `rubocop ${fileName()}`, errors: escape(message) })
-  state.textContent = "RuboCop failed on this input"
+  setStatus("RuboCop failed on this input")
 }
 
 function fail(message) {
   output.innerHTML = `<span class="t-r">Couldn't start RuboCop: ${escape(message)}</span>\n` +
     `<span class="t-d"># The playground needs WebAssembly and about 11 MB of downloads. Reloading usually helps.</span>`
-  state.textContent = "not running"
+  setStatus("not running")
 }
 
 function input() {
@@ -331,7 +341,8 @@ async function refresh() {
     if (shown.type === "error") return showError(shown.message)
     showOutput(shown)
     applyButton.hidden = mode === "lint" || !shown.patch
-    state.textContent = `RuboCop on Ruby ${rubyVersion} (wasm), ${shown.ms} ms`
+    const count = offenses.length ? `${offenses.length} offense${offenses.length === 1 ? "" : "s"}` : "no offenses"
+    setStatus(`RuboCop on Ruby ${rubyVersion} (wasm), ${shown.ms} ms`, count)
     saveDraft()
   } finally {
     running = false
@@ -355,12 +366,13 @@ function saveDraft() {
 
 async function main() {
   const shared = await readShared()
-  code = editor(document.getElementById("ed-code"), shared?.code ?? EXAMPLE, ruby)
-  config = editor(document.getElementById("ed-config"), shared?.config ?? EXAMPLE_CONFIG, yaml)
+  code = editor(document.getElementById("ed-code"), shared?.code ?? EXAMPLE, ruby, "Ruby code")
+  config = editor(document.getElementById("ed-config"), shared?.config ?? EXAMPLE_CONFIG, yaml, "RuboCop configuration")
   if (shared?.file) fileInput.value = shared.file
   if (["lint", "diff", "diff-all"].includes(shared?.mode)) mode = shared.mode
 
   for (const tab of document.querySelectorAll(".src [data-pane]")) tab.addEventListener("click", () => showPane(tab.dataset.pane))
+  fileInput.addEventListener("focus", () => showPane("ed-code"))
   for (const tab of document.querySelectorAll(".out [data-mode]")) tab.addEventListener("click", () => selectMode(tab.dataset.mode))
   fileInput.addEventListener("input", () => schedule())
 

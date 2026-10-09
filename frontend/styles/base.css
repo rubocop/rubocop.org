@@ -36,6 +36,34 @@ a:hover {
   text-decoration-line: underline;
 }
 
+/* Keyboard focus looks the same everywhere. The cop search draws it around
+   the whole prompt rather than the bare input, and inside the terminals and
+   the playground panes, which clip their edges, it goes on the inside. */
+:focus-visible, .query:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 2px; }
+:is(.term, .pane) :focus-visible { outline-offset: -2px; }
+
+.skip {
+  position: absolute;
+  top: -10rem;
+  left: 1rem;
+  z-index: 11;
+  padding: .5rem .8rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.skip:focus { top: .5rem; }
+
+/* For screen readers only. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Buttons that read like links. */
 .link-button {
   padding: 0;
@@ -52,7 +80,7 @@ a:hover {
 .link-button:hover { text-decoration: underline wavy var(--red); }
 
 /* Tab strips: the selected tab gets a red underline. */
-[role="tab"] {
+[role="tab"], .tab {
   margin-bottom: -1px;
   background: none;
   border: 0;
@@ -62,7 +90,7 @@ a:hover {
   cursor: pointer;
 }
 
-[role="tab"][aria-selected="true"] { border-bottom-color: var(--red); }
+[role="tab"][aria-selected="true"], .tab[aria-current="true"] { border-bottom-color: var(--red); }
 
 code {
   font-family: var(--mono);

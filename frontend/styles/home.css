@@ -61,10 +61,12 @@
   grid-template-columns: 6.5rem 2.6rem 1fr;
   align-items: start;
   gap: .75rem;
-  margin-bottom: .55rem;
+  margin-bottom: .7rem;
 }
 
 .dept-name { padding-top: 1px; color: var(--ink); }
+/* a taller target than the text, for fingers */
+.dept-name a { display: inline-block; padding: 6px 0; margin: -6px 0; }
 .dept-n { padding-top: 1px; color: var(--ink-3); text-align: right; }
 .cells { display: flex; flex-wrap: wrap; gap: 3px; }
 .cells a { display: block; }

@@ -5,6 +5,8 @@ require 'cgi/escape'
 module Builders
   # Helpers for the templates.
   class Helpers < SiteBuilder
+    include Streamlined::Helpers
+
     STATUS = { 'enabled' => 'on', 'pending' => 'pending', 'disabled' => 'opt-in' }.freeze
     FIX = {
       'safe' => ['-a', 'Fixed by rubocop -a'],
@@ -46,19 +48,24 @@ module Builders
     end
 
     # A recorded run from the demo project: the prompt, then its output.
-    def terminal(run, id: nil, hidden: false)
-      attributes = [(%( id="#{id}") if id), (' hidden' if hidden)].join
+    # The attributes go on the <pre>.
+    def terminal(run, **attributes)
       prompt = %(<span class="pr">~/shop $ </span><span class="cmd">#{CGI.escapeHTML(run[:command])}</span>)
       output = RubocopHTML.terminal(run[:output]) { |name| site.data.cop_urls[name] }
-      "<pre#{attributes}>#{prompt}\n#{output}</pre>".html_safe
+      "<pre#{html_attributes(attributes, prefix_space: true)}>#{prompt}\n#{output}</pre>".html_safe
     end
 
     # Several runs behind tabs, the first one showing. Keys are tab labels.
     def terminal_tabs(prefix, runs)
-      buttons = runs.keys.each_with_index.map do |label, i|
-        %(<button type="button" role="tab" aria-selected="#{i.zero?}" data-out="#{prefix}-#{i}">#{label}</button>)
-      end
-      panes = runs.values.each_with_index.map { |run, i| terminal(run, id: "#{prefix}-#{i}", hidden: !i.zero?) }
+      buttons, panes = runs.each_with_index.map do |(label, run), i|
+        tab = "#{prefix}-tab-#{i}"
+        pane = "#{prefix}-#{i}"
+        button = { type: 'button', role: 'tab', id: tab, aria_selected: i.zero?.to_s, aria_controls: pane }
+        [
+          "<button#{html_attributes(button, prefix_space: true)}>#{label}</button>",
+          terminal(run, id: pane, role: 'tabpanel', aria_labelledby: tab, tabindex: 0, hidden: !i.zero?)
+        ]
+      end.transpose
       %(<div class="term-tabs" role="tablist">#{buttons.join}</div>#{panes.join}).html_safe
     end
 

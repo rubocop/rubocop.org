@@ -19,10 +19,10 @@ progress: true
 
     <div class="install">
       <div class="install-tabs" role="tablist">
-        <button type="button" role="tab" aria-selected="true" data-cmd="gem install rubocop" data-prompt="$" data-note="">gem</button>
-        <button type="button" role="tab" aria-selected="false" data-cmd="gem 'rubocop', require: false" data-prompt="#" data-note="In your Gemfile. RuboCop is a standalone tool, so nothing needs to require it.">bundler</button>
+        <button type="button" role="tab" aria-selected="true" aria-controls="install-line" data-cmd="gem install rubocop" data-prompt="$" data-note="">gem</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="install-line" data-cmd="gem 'rubocop', require: false" data-prompt="#" data-note="In your Gemfile. RuboCop is a standalone tool, so nothing needs to require it.">bundler</button>
       </div>
-      <div class="install-line"><span class="p">$</span><code>gem install rubocop</code><button type="button" class="copy link-button">copy</button></div>
+      <div class="install-line" id="install-line" role="tabpanel" aria-label="Install command"><span class="p">$</span><code>gem install rubocop</code><button type="button" class="copy link-button">copy</button></div>
     </div>
     <p class="install-note" id="install-note" hidden></p>
 
@@ -59,7 +59,7 @@ progress: true
       </div>
     <% end %>
     <div class="legend"><span class="sq">on by default</span><span class="sq pending">pending (on in the next major release)</span><span class="sq disabled">opt-in</span></div>
-    <div class="readout" aria-live="polite">Each square is a cop. <%= counts["enabled"] %> are on by default, <%= counts["pending"] %> are pending until the next major release and <%= counts["disabled"] %> are opt-in. Hover one to see what it does.</div>
+    <div class="readout" aria-live="polite">Each square is a cop. <%= counts["enabled"] %> are on by default, <%= counts["pending"] %> are pending until the next major release and <%= counts["disabled"] %> are opt-in. Hover one, or tab in and use the arrow keys, to see what it does.</div>
   </div>
 </section>
 
@@ -87,7 +87,7 @@ progress: true
     <p class="more"><a href="<%= site.metadata.docs_url %>configuration.html">Configuration &rarr;</a></p>
   </div>
   <div class="yaml">
-<pre><span class="y-c"># .rubocop.yml</span>
+<pre tabindex="0"><span class="y-c"># .rubocop.yml</span>
 <span class="y-k">inherit_from</span>: <span class="y-s">.rubocop_todo.yml</span>
 
 <span class="y-k">AllCops</span>:
@@ -113,7 +113,7 @@ progress: true
   </div>
   <div class="yaml">
     <% width = site.data.plugins.map { |plugin| plugin[:name].size }.max %>
-<pre><span class="y-k">plugins</span>:
+<pre tabindex="0"><span class="y-k">plugins</span>:
 <% site.data.plugins.each do |plugin| %>  - <a class="y-s" href="https://github.com/rubocop/<%= plugin[:name] %>"><%= plugin[:name] %></a><%= " " * (width - plugin[:name].size) %>  <span class="y-c"># <%= plugin[:note] %></span>
 <% end %></pre>
   </div>
