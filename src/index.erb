@@ -12,8 +12,7 @@ progress: true
 <section class="hero" data-sec>
   <div>
     <h1>
-      <img class="logo-light" src="<%= relative_url "/images/rubo-logo-horizontal.png" %>" alt="RuboCop" width="720" height="230">
-      <img class="logo-dark" src="<%= relative_url "/images/rubo-logo-horizontal-dark.png" %>" alt="RuboCop" width="720" height="230">
+      <%= render "logo" %>
     </h1>
     <p class="comment"># <%= site.metadata.tagline %></p>
     <p class="lede">RuboCop checks your Ruby code against the community <a href="<%= site.metadata.style_guide_url %>">Ruby Style Guide</a>, points out what's off and fixes most of it for you. It knows about bugs, style, layout and complexity, it bends to your team's taste, and it's been at it since 2012.</p>

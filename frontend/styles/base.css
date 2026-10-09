@@ -122,7 +122,7 @@ main {
   letter-spacing: .02em;
 }
 
-.brand img { width: 22px; height: 22px; }
+.brand .logo { height: 22px; width: auto; }
 .ver { color: var(--ink-3); }
 
 /* one mark per section, like the progress formatter */
@@ -167,17 +167,8 @@ main {
 #theme[data-mode="light"] .i-light,
 #theme[data-mode="dark"] .i-dark { display: block; }
 
-/* Two logo images, one per theme. This has to follow the toggle as well as
-   the system setting, so it can't use light-dark(). */
-.logo-dark { display: none; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .logo-light { display: none; }
-  :root:not([data-theme="light"]) .logo-dark { display: inline; }
-}
-
-:root[data-theme="dark"] .logo-light { display: none; }
-:root[data-theme="dark"] .logo-dark { display: inline; }
+.logo { display: block; }
+.logo .visor { fill: var(--red); }
 
 /* page titles, outside the home page */
 

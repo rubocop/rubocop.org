@@ -8,8 +8,8 @@
   padding: 4.5rem 0 3.5rem;
 }
 
-.hero h1 { margin: 0 0 1.4rem; line-height: 0; }
-.hero h1 img { width: min(360px, 80%); height: auto; }
+.hero h1 { margin: 0 0 1.4rem; }
+.hero .logo { width: min(320px, 72%); height: auto; }
 .hero .comment { margin-bottom: 1.4rem; }
 .lede { margin: 0 0 1.8rem; font-size: 1.12rem; }
 

@@ -1,8 +1,7 @@
 <header class="bar">
   <div class="bar-in">
     <a class="brand" href="<%= relative_url "/" %>">
-      <img class="logo-light" src="<%= relative_url "/images/rubo-logo-symbol.png" %>" alt="">
-      <img class="logo-dark" src="<%= relative_url "/images/rubo-logo-symbol-dark.png" %>" alt="">
+      <%= render "logo_symbol" %>
       rubocop
     </a>
     <span class="ver"><%= latest_release&.version || site.data.rubocop.version %></span>

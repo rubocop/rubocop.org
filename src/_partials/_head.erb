@@ -8,7 +8,8 @@
 <meta property="og:image" content="<%= absolute_url "/images/rubo-logo-horizontal.png" %>">
 <meta property="og:type" content="website">
 
-<link rel="icon" href="<%= relative_url "/images/favicon.ico" %>" type="image/x-icon">
+<link rel="icon" href="<%= relative_url "/images/favicon.ico" %>" sizes="32x32">
+<link rel="icon" href="<%= relative_url "/images/favicon.svg" %>" type="image/svg+xml">
 
 <%# Applies a saved theme before the first paint, so dark mode doesn't flash. %>
 <script>try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t } catch (e) {}</script>
