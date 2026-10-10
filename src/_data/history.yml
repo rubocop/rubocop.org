@@ -35,3 +35,7 @@
   url: https://github.com/rubocop/rubocop/releases/tag/v1.91.0
   date: 2026-09-10
   text: 1.91 starts the road to 2.0
+- commit: 4172ce5
+  url: https://github.com/rubocop/rubocop/releases/tag/v1.92.0
+  date: 2026-10-10
+  text: 1.92 makes RuboCop a better fit for coding agents
