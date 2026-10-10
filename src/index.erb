@@ -184,7 +184,7 @@ progress: true
     <p>RuboCop is free and maintained by a small core team of volunteers, with help from thousands of contributors. If your company's code goes through RuboCop every day, consider giving something back. It's what keeps the lights on and the releases coming.</p>
     <ul class="people">
       <% site.data.team.each do |member| %>
-        <li><img src="https://github.com/<%= member[:github] %>.png?size=60" alt="" loading="lazy" width="30" height="30"><a href="https://github.com/<%= member[:github] %>"><%= member[:name] %></a></li>
+        <li><img src="https://avatars.githubusercontent.com/<%= member[:github] %>?s=60" alt="" loading="lazy" width="30" height="30"><a href="https://github.com/<%= member[:github] %>"><%= member[:name] %></a></li>
       <% end %>
     </ul>
     <div class="fund">

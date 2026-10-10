@@ -8,7 +8,8 @@
   padding: 4.5rem 0 3.5rem;
 }
 
-.hero h1 { margin: 0 0 1.4rem; }
+/* Firefox warns about an h1 inside a section that doesn't set its own size. */
+.hero h1 { margin: 0 0 1.4rem; font-size: inherit; }
 .hero .logo { width: min(320px, 72%); height: auto; }
 .hero .comment { margin-bottom: 1.4rem; }
 .lede { margin: 0 0 1.8rem; font-size: 1.12rem; }
