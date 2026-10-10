@@ -46,7 +46,7 @@ gem 'puma', '< 8'
 # The site is built from RuboCop itself: the cop index reads the registry of
 # RuboCop and its official plugins, the home page shows real runs, and the
 # playground ships this exact RuboCop. Bumping these versions refreshes all of it.
-gem 'rubocop', '~> 1.91', require: false
+gem 'rubocop', '~> 1.92', require: false
 
 group :test do
   gem 'rspec', require: false
