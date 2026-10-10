@@ -83,3 +83,9 @@
   .pane.out { min-height: 18rem; }
   .out pre { white-space: pre; overflow-wrap: normal; }
 }
+
+/* iOS zooms in on any field under 16px when it gets focus. The file name
+   stays small to match its tab; renaming is rare enough to live with it. */
+@media (pointer: coarse) {
+  .editor .cm-editor { font-size: 16px; }
+}
