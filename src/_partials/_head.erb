@@ -1,9 +1,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><%= resource.data.title ? "#{resource.data.title} | #{site.metadata.title}" : "#{site.metadata.title}: #{site.metadata.tagline}" %></title>
+<title><%= page_title resource.data.title %></title>
 <meta name="description" content="<%= resource.data.description || site.metadata.description %>">
 
-<meta property="og:title" content="<%= resource.data.title || site.metadata.title %>">
+<meta property="og:title" content="<%= page_title resource.data.title %>">
 <meta property="og:description" content="<%= resource.data.description || site.metadata.description %>">
 <meta property="og:image" content="<%= absolute_url "/images/rubo-logo-horizontal.png" %>">
 <meta property="og:type" content="website">

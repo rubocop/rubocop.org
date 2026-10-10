@@ -16,10 +16,19 @@ module Builders
 
     def build
       %i[
-        code_spans delimited cop_link status_label fix_badge terminal terminal_tabs news latest_release release_post
+        page_title code_spans delimited cop_link status_label fix_badge terminal terminal_tabs
+        news latest_release release_post
       ].each do |name|
         helper name
       end
+    end
+
+    # "Cops | RuboCop", or the tagline on the home page. Bridgetown would title
+    # that one "Index" after its file name, so it sets an empty title instead.
+    def page_title(title)
+      return "#{site.metadata.title}: #{site.metadata.tagline}" if title.to_s.empty?
+
+      "#{title} | #{site.metadata.title}"
     end
 
     # Escapes text and turns `backticks` into <code>, the way RuboCop's

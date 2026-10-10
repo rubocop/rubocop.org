@@ -9,7 +9,8 @@ RSpec.describe Builders::Helpers do
   subject(:helpers) do
     described_class.allocate.tap do |builder|
       data = HashWithDotAccess::Hash.new(releases:, posts:, cop_urls: {})
-      builder.define_singleton_method(:site) { Struct.new(:data).new(data) }
+      metadata = HashWithDotAccess::Hash.new(title: 'RuboCop', tagline: 'The Ruby linter')
+      builder.define_singleton_method(:site) { Struct.new(:data, :metadata).new(data, metadata) }
     end
   end
 
@@ -23,6 +24,16 @@ RSpec.describe Builders::Helpers do
 
   def release(version, prerelease: false, date: '2026-09-10')
     { version:, prerelease:, date: Date.parse(date), url: "https://example.com/v#{version}" }
+  end
+
+  describe '#page_title' do
+    it 'puts the site name after the page' do
+      expect(helpers.page_title('Cops')).to eq('Cops | RuboCop')
+    end
+
+    it 'uses the tagline for a page with an empty title' do
+      expect(helpers.page_title('')).to eq('RuboCop: The Ruby linter')
+    end
   end
 
   describe '#latest_release' do
