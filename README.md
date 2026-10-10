@@ -6,9 +6,15 @@ The site is meant to complement the [docs](https://docs.rubocop.org), not repeat
 
 ## Prerequisites
 
-- [Ruby](https://www.ruby-lang.org/en/downloads/) >= 3.2
-- [Node.js](https://nodejs.org) >= 20
+- [Ruby](https://www.ruby-lang.org/en/downloads/) 4.0 (see `.ruby-version`)
+- [Node.js](https://nodejs.org) 24 LTS (see `.node-version`)
 - [Bundler](https://bundler.io/)
+
+The recommended way to install Ruby and Node.js is [mise](https://mise.jdx.dev/), which reads `.ruby-version` and `.node-version` through `mise.toml`:
+
+```sh
+mise trust && mise install
+```
 
 ## Setup
 
