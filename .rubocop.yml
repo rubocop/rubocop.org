@@ -2,6 +2,12 @@
 plugins:
   - rubocop-rspec
 
+# Keep RuboCop's default exclusions (vendor/ among them, where CI installs
+# the gems) next to ours.
+inherit_mode:
+  merge:
+    - Exclude
+
 AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
