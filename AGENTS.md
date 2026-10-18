@@ -61,8 +61,7 @@ codespell
   goes through `vm.eval`.
 - **`plugins/rubocop_html.rb` runs in two places**, the Bridgetown build and
   ruby.wasm, so it sticks to the standard library.
-- **Some code works around RuboCop and its dependencies**: the
-  digit-keeping docs anchors in `RubocopHTML.docs_url`, the Socket stub in
+- **Some code works around RuboCop and its dependencies**: the Socket stub in
   `prelude.rb` and `UNVERSIONED_DOCS`. Each has a comment saying why. Drop
   one only when the bundled gems no longer need it, and for the Socket stub,
   only after checking that the playground still boots.

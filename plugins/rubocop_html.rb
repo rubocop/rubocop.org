@@ -22,8 +22,9 @@ module RubocopHTML
 
   module_function
 
-  # Docs anchors keep digits (Lint/UselessRuby2Keywords), so this doesn't use
-  # RuboCop::Cop::Documentation, which drops them.
+  # The same anchors as RuboCop::Cop::Documentation.url_for, which can't stand
+  # in for this: it needs the cop's class and config, links to unversioned
+  # pages and has no docs for rubocop-thread_safety.
   def docs_url(cop_name, plugin = 'rubocop')
     department = cop_name.split('/')[0..-2].join('/')
     "#{department_url(department, plugin)}##{cop_name.downcase.gsub(/[^a-z0-9]/, '')}"
