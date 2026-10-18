@@ -5,12 +5,10 @@ name: Deploy to GitHub pages
   push:
     branches:
       - main
-  # The site shows live data (releases, stars, posts), so rebuild it weekly
-  # and whenever a RuboCop release asks for it.
+  # The site shows live data (releases, stars, posts), so rebuild it daily.
+  # A new RuboCop release shows up by the next morning.
   schedule:
-    - cron: "17 5 * * 1"
-  repository_dispatch:
-    types: [rubocop-release]
+    - cron: "17 5 * * *"
   workflow_dispatch:
 
 concurrency:

@@ -51,6 +51,6 @@ The fonts are Martian Grotesk and Martian Mono by Evil Martians, under the SIL O
 
 ## Deployment
 
-The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy` and deploys the `output/` directory on every push to `main`, once a week (to pick up new releases and posts), and on a `rubocop-release` repository dispatch.
+The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy` and deploys the `output/` directory on every push to `main` and once a day, to pick up new releases and posts.
 
 The workflow automatically sets `BASE_PATH` based on the repository. Forks get `/rubocop.org` so the site works at `<username>.github.io/rubocop.org/`, while the main repo uses `/` for the `rubocop.org` custom domain.
