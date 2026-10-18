@@ -153,8 +153,11 @@ main {
 .brand .logo { height: 22px; width: auto; }
 .ver { color: var(--ink-3); }
 
-/* one mark per section, like the progress formatter */
+/* one mark per section, like the progress formatter. It gives way first when
+   the header runs out of room. */
 .run {
+  min-width: 0;
+  overflow: hidden;
   color: var(--ink-3);
   white-space: nowrap;
   letter-spacing: .12em;
@@ -382,16 +385,17 @@ footer {
 .not-found { max-width: 52rem; }
 .not-found-links { margin: 1.6rem 0 3rem; }
 
+/* The header sheds its extras as it narrows. */
 @media (max-width: 960px) {
   section.s { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  .run { display: none; }
+  .run, .ver, .bar nav :is(.opt-lg, .star), #theme .label { display: none; }
 }
 
 @media (max-width: 640px) {
   body { font-size: 16px; }
   .bar-in { gap: .8rem; }
   .bar nav { gap: .9rem; }
-  .bar nav .opt, .ver, .bar nav .star, #theme .label, .long { display: none; }
+  .bar nav .opt, .long { display: none; }
   #theme { padding-left: .9rem; }
 }
 
