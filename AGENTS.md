@@ -63,8 +63,8 @@ codespell
   ruby.wasm, so it sticks to the standard library.
 - **Some code works around RuboCop and its dependencies**: the Socket stub in
   `prelude.rb` and `UNVERSIONED_DOCS`. Each has a comment saying why. Drop
-  one only when the bundled gems no longer need it, and for the Socket stub,
-  only after checking that the playground still boots.
+  one only when the bundled gems no longer need it. `spec/playground_spec.rb`
+  fails while some cop still needs the Socket stub.
 - **Colors only come from tokens.** Each is a custom property in `tokens.css`
   with a light and a dark value, and `spec/tokens_spec.rb` fails any text color
   under 4.5:1 contrast.

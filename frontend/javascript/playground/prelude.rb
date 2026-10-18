@@ -4,7 +4,8 @@
 # plugins/rubocop_html.rb and from /work. Everything the page sends arrives as
 # plain files in /pg, so user input never ends up inside Ruby code.
 
-# ruby.wasm has no sockets, and RuboCop only needs the constants to exist.
+# ruby.wasm has no sockets, but resolv, which Style/IpAddresses loads, requires
+# socket and io/wait. RuboCop only needs the constants to exist.
 unless defined?(Socket)
   class SocketError < StandardError; end
   class BasicSocket < IO; end
