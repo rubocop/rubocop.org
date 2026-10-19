@@ -8,6 +8,8 @@ module Builders
   # pattern matches in it, both straight from the bundled RuboCop. DemoRuns
   # records the runs that report the offense and fix it.
   class Walkthrough < SiteBuilder
+    include Demo
+
     FILE = 'lib/user.rb'
     COP = RuboCop::Cop::Style::NilComparison
     MATCHER = :nil_comparison?
@@ -63,7 +65,7 @@ module Builders
       "\e[2m#{text[...range.begin]}\e[1;33m#{text[range]}\e[22;2m#{text[range.end..]}\e[0m"
     end
 
-    def source = File.read(demo(FILE))
+    def source = File.read(demo_path(FILE))
     def ast = @ast ||= parsed(source)
     def tree = ast.to_s
 
@@ -75,11 +77,7 @@ module Builders
 
     # Not config, which Bridgetown's builders already have.
     def demo_config
-      @demo_config ||= RuboCop::ConfigLoader.configuration_from_file(demo('.rubocop.yml'), check: false)
-    end
-
-    def demo(path)
-      site.in_root_dir(DemoRuns::DEMO_DIR, path)
+      @demo_config ||= RuboCop::ConfigLoader.configuration_from_file(demo_path('.rubocop.yml'), check: false)
     end
   end
 end

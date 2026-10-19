@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
-require 'digest'
-require 'fileutils'
 require 'json'
 require 'open3'
-require 'tmpdir'
 
 module Builders
   # Runs RuboCop on the small project in demo/ and keeps what it prints,
   # colors included, for the terminals on the home page. Nothing there is
   # typed up by hand, so it can't drift from what RuboCop actually prints.
   class DemoRuns < SiteBuilder
-    DEMO_DIR = 'demo'
+    include Demo
 
     RUNS = {
       lint: %w[],
@@ -34,44 +31,25 @@ module Builders
 
     def build
       hook :site, :post_read do
-        site.data[:runs] = cache.getset(cache_key) { run_all }
+        site.data[:runs] = cache.getset(demo_key(__FILE__)) { run_all }
       end
     end
 
     private
 
-    # The output depends on the demo files, every gem in the bundle and the
-    # postprocessing in this file.
-    def cache_key
-      inputs = [File.read(site.in_root_dir('Gemfile.lock')), File.read(__FILE__), *demo_files]
-      Digest::SHA256.hexdigest(inputs.join("\0"))
-    end
-
-    def demo_files
-      files = Dir.glob('**/*', File::FNM_DOTMATCH, base: demo_path).sort.select { |f| File.file?(File.join(demo_path, f)) }
-      files.map { |f| "#{f}\0#{File.read(File.join(demo_path, f))}" }
-    end
-
-    def demo_path
-      site.in_root_dir(DEMO_DIR)
-    end
-
     def run_all
       RUNS.map { |name, args| Thread.new { [name, run(name, args)] } }.to_h(&:value)
     end
 
-    # Each run gets a fresh copy, since -a rewrites the files.
     def run(name, args)
-      Dir.mktmpdir do |dir|
-        FileUtils.cp_r("#{demo_path}/.", dir)
+      in_demo_copy do |dir|
         output = rubocop(dir, name == :json ? args : [*args, '--color'])
         postprocess(name, ['rubocop', *args].join(' '), output.rstrip)
       end
     end
 
     def rubocop(dir, args)
-      command = [RbConfig.ruby, '-rbundler/setup', Gem.bin_path('rubocop', 'rubocop'), *args, '--cache', 'false']
-      output, errors, status = Open3.capture3({ 'BUNDLE_GEMFILE' => site.in_root_dir('Gemfile') }, *command, chdir: dir)
+      output, errors, status = Open3.capture3(*rubocop_command(*args, '--cache', 'false'), chdir: dir)
       # 1 just means offenses. Anything else is RuboCop failing, and its
       # partial output shouldn't end up on the home page.
       raise "rubocop #{args.join(' ')} exited with #{status.exitstatus}: #{errors}" if status.exitstatus > 1
