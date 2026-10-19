@@ -4,6 +4,9 @@ AllCops:
   NewCops: enable
   # The site's own bundle has plugins in it, which this project doesn't use.
   SuggestExtensions: false
+  # How it works on the home page has this file to itself.
+  Exclude:
+    - lib/user.rb
 Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:

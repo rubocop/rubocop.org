@@ -36,7 +36,7 @@ bundle exec rspec
 Most of what the site shows comes from RuboCop itself, at build time:
 
 - **The cop index** (`/cops/`) and the grid on the home page come from the cop registry of RuboCop and its official plugins, loaded from this site's bundle (`plugins/builders/cops.rb`).
-- **The terminal output** on the home page is RuboCop run on the small project in `demo/` (`plugins/builders/demo_runs.rb`). Change the files there and the examples follow.
+- **The terminal output** on the home page is RuboCop run on the small project in `demo/` (`plugins/builders/demo_runs.rb`). Change the files there and the examples follow. How it works follows the offense in `demo/lib/user.rb`, and `plugins/builders/walkthrough.rb` adds its tree and the pattern that matches it.
 - **The playground** (`/playground/`) runs RuboCop on [ruby.wasm](https://github.com/ruby/ruby.wasm) in a web worker. The Ruby runtime is loaded from jsDelivr, and the build packs the RuboCop from this bundle, with its dependencies, into an archive next to the page (`plugins/builders/playground.rb`). The worker and the Ruby side of it live in `frontend/javascript/playground/`.
 - **News** combines the latest GitHub releases (`plugins/builders/github.rb`) with the RuboCop posts on [Meta Redux](https://metaredux.com) (`plugins/builders/news.rb`).
 - **The backers** in the funding section come from the project's [Open Collective](https://opencollective.com/rubocop) members list (`plugins/builders/open_collective.rb`).

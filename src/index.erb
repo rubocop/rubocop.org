@@ -7,6 +7,7 @@ progress: true
   release = latest_release
   post = release && release_post(release)
   runs = site.data.runs
+  walk = site.data.walkthrough
   grid = site.data.departments.select { |department| department[:plugin] == "rubocop" }.sort_by { |department| -department[:cops].size }
   counts = grid.flat_map { |department| department[:cops] }.map { |cop| cop[:status] }.tally
 %>
@@ -102,6 +103,22 @@ progress: true
   <span class="y-k">Max</span>: <span class="y-v">15</span>
   <span class="y-k">Exclude</span>:
     - <span class="y-s">db/migrate/**/*</span></pre>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>How it works</h2>
+    <p>RuboCop never runs your code. It parses each file into a syntax tree, with Prism, or with the parser gem for code that targets Ruby older than 3.3. Then it walks the tree once and calls each cop for the kinds of nodes it asked to see.</p>
+    <p>Most cops are a node pattern and a message. <code>Style/NilComparison</code> asks to see calls to <code>==</code>, <code>===</code> and <code>nil?</code>, and reports the ones its pattern matches.</p>
+    <p>Corrections don't touch the tree. A cop rewrites the source where its node came from, and RuboCop parses the result and runs the cops again, until a pass changes nothing. That's how one <code>rubocop -a</code> can sort out code that takes several cops in turn.</p>
+    <p class="more">
+      <a href="https://docs.rubocop.org/rubocop-ast/latest/node_pattern.html">Node patterns &rarr;</a>
+      <a href="<%= site.metadata.docs_url %>development.html">Writing your own cops &rarr;</a>
+    </p>
+  </div>
+  <div class="term walk" role="group" aria-label="One offense followed through RuboCop">
+    <%= terminal_tabs "walk", "parse" => walk[:parse], "match" => walk[:match], "report" => runs[:walk], "correct" => runs[:walk_fix] %>
   </div>
 </section>
 

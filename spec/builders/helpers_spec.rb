@@ -56,6 +56,12 @@ RSpec.describe Builders::Helpers do
     end
   end
 
+  describe '#terminal' do
+    it 'leaves the prompt out when there is no command' do
+      expect(helpers.terminal({ output: '(nil)' })).to eq('<pre>(nil)</pre>')
+    end
+  end
+
   describe '#terminal_tabs' do
     let(:runs) do
       { 'rubocop' => { command: 'rubocop', output: '' }, 'rubocop -a' => { command: 'rubocop -a', output: '' } }

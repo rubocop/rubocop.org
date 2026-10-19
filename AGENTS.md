@@ -21,7 +21,7 @@ gems in `Gemfile.lock` changes the site.
 |------|------------------|
 | `src/` | the pages (`index.erb`, `cops.erb`, `playground.erb`, `404.erb`), partials and the layout |
 | `src/_data/` | hand-kept data: the team, the history log, the plugin list, site metadata |
-| `plugins/builders/` | build-time data: the cop registry, the demo runs, GitHub releases, Meta Redux posts, Open Collective backers, the playground's gem archive, template helpers |
+| `plugins/builders/` | build-time data: the cop registry, the demo runs, the How it works walkthrough, GitHub releases, Meta Redux posts, Open Collective backers, the playground's gem archive, template helpers |
 | `plugins/rubocop_html.rb` | turns RuboCop's terminal output into HTML, at build time and inside the playground |
 | `demo/` | the small project whose RuboCop runs fill the home page terminals |
 | `frontend/styles/` | `tokens.css` holds every color for both themes; the rest is a file per page |

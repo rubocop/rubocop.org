@@ -100,6 +100,23 @@
   color: var(--ink-2);
 }
 
+/* how it works: the tabs read as the steps of a run */
+
+.walk { --step: 1rem; }
+.walk .term-tabs { column-gap: var(--step); }
+.walk [role="tab"] { position: relative; }
+
+.walk [role="tab"] + [role="tab"]::before {
+  content: "→";
+  content: "→" / "";
+  position: absolute;
+  right: 100%;
+  width: var(--step);
+  pointer-events: none;
+  color: var(--term-dim);
+  text-align: center;
+}
+
 /* where it runs */
 
 dl.flags { margin: 1.6rem 0 0; }
@@ -228,4 +245,7 @@ dl.flags dd {
   .dept-n { text-align: left; }
   .cells { grid-column: 1 / -1; }
   .log li, .news li { grid-template-columns: minmax(0, 1fr); gap: .1rem; }
+  /* all the steps on one line */
+  .walk { --step: .6rem; }
+  .walk [role="tab"] { padding-inline: .4rem; }
 }

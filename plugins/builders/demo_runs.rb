@@ -21,12 +21,16 @@ module Builders
       offenses: %w[-f offenses],
       worst: %w[-f worst],
       github: %w[-f github],
-      json: %w[-f json]
+      json: %w[-f json],
+      # How it works follows the offense in this file alone, which the other
+      # runs leave out.
+      walk: %w[lib/user.rb],
+      walk_fix: %w[-a --diff lib/user.rb]
     }.freeze
 
-    # The runs that print a diff skip the offense listing, which the first
-    # tab already shows.
-    ELIDED = %i[diff fix_all].freeze
+    # The runs that print a diff skip the offense listing, which the page
+    # already shows elsewhere.
+    ELIDED = %i[diff fix_all walk_fix].freeze
 
     def build
       hook :site, :post_read do

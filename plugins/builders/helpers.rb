@@ -57,11 +57,14 @@ module Builders
     end
 
     # A recorded run from the demo project: the prompt, then its output.
+    # Output without a command, like the walkthrough's tree, gets no prompt.
     # The attributes go on the <pre>.
     def terminal(run, **attributes)
-      prompt = %(<span class="pr">~/shop $ </span><span class="cmd">#{CGI.escapeHTML(run[:command])}</span>)
-      output = RubocopHTML.terminal(run[:output]) { |name| site.data.cop_urls[name] }
-      "<pre#{html_attributes(attributes, prefix_space: true)}>#{prompt}\n#{output}</pre>".html_safe
+      html = RubocopHTML.terminal(run[:output]) { |name| site.data.cop_urls[name] }
+      if run[:command]
+        html = %(<span class="pr">~/shop $ </span><span class="cmd">#{CGI.escapeHTML(run[:command])}</span>\n#{html})
+      end
+      "<pre#{html_attributes(attributes, prefix_space: true)}>#{html}</pre>".html_safe
     end
 
     # Several runs behind tabs, the first one showing. Keys are tab labels.

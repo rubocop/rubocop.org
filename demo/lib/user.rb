@@ -1,0 +1,1 @@
+return if user == nil
