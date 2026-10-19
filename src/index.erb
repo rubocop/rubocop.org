@@ -39,7 +39,7 @@ progress: true
     </p>
   </div>
 
-  <div class="term" aria-label="RuboCop runs on a small project">
+  <div class="term" role="group" aria-label="RuboCop runs on a small project">
     <%= terminal_tabs "run", "rubocop" => runs[:lint], "rubocop --diff" => runs[:diff], "rubocop -a" => runs[:fix] %>
   </div>
 </section>
