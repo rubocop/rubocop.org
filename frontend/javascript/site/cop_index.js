@@ -1,7 +1,9 @@
 // Filters for the cop index. Every cop is already in the page; this only hides
 // rows, and keeps the filters in the query string so a filtered view can be
 // linked to.
-const FIELDS = ["q", "plugin", "department", "status", "fix"]
+// Facets each row carries in a data attribute.
+const ROW_FIELDS = ["status", "fix", "index"]
+const FIELDS = ["q", "plugin", "department", ...ROW_FIELDS]
 
 // "Style/*Literal*" works like a --show-cops pattern, anything else matches
 // names and descriptions.
@@ -29,8 +31,7 @@ export function setupCopIndex() {
       element,
       name: element.querySelector(".name").textContent.toLowerCase(),
       text: element.querySelector(".desc").textContent.toLowerCase(),
-      status: element.dataset.status,
-      fix: element.dataset.fix,
+      ...Object.fromEntries(ROW_FIELDS.map((field) => [field, element.dataset[field]])),
     })),
   }))
   const total = groups.reduce((sum, group) => sum + group.rows.length, 0)
@@ -44,13 +45,14 @@ export function setupCopIndex() {
   const apply = () => {
     const values = Object.fromEntries(FIELDS.map((field) => [field, form.elements[field].value]))
     const matches = matcher(values.q)
+    const facets = ROW_FIELDS.filter((field) => values[field])
     let shown = 0
 
     for (const group of groups) {
       const inGroup = (!values.plugin || group.plugin === values.plugin) && (!values.department || group.department === values.department)
       let visible = 0
       for (const row of group.rows) {
-        const show = inGroup && (!values.status || row.status === values.status) && (!values.fix || row.fix === values.fix) && matches(row)
+        const show = inGroup && facets.every((field) => row[field] === values[field]) && matches(row)
         if (row.element.hidden === show) row.element.hidden = !show
         if (show) visible++
       }

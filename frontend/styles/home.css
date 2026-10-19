@@ -11,7 +11,7 @@
 /* Firefox warns about an h1 inside a section that doesn't set its own size. */
 .hero h1 { margin: 0 0 1.4rem; font-size: inherit; }
 .hero .logo { width: min(320px, 72%); height: auto; }
-.hero .comment { margin-bottom: 1.4rem; }
+.hero h1 + .comment { margin-bottom: 1.4rem; }
 .lede { margin: 0 0 1.8rem; font-size: 1.12rem; }
 
 .install {
@@ -44,6 +44,7 @@
 .install-line .copy { color: var(--ink-3); font-size: 12px; }
 .install-line .copy:hover { color: var(--ink); }
 .install-note { margin: .75rem 0 0; font-size: 13px; color: var(--ink-2); }
+.hero .extras { margin-top: .75rem; }
 
 .meta {
   margin-top: 1.4rem;
@@ -198,14 +199,7 @@
 .log .d { color: var(--ink-3); }
 .log .sum { color: var(--ink-2); }
 
-.log .tag {
-  margin-left: .4rem;
-  padding: 0 .3rem;
-  border: 1px solid var(--rule);
-  border-radius: 3px;
-  color: var(--ink-3);
-  font-size: 11px;
-}
+.log .tag { margin-left: .4rem; }
 
 .news li { grid-template-columns: 6.8rem 1fr; }
 

@@ -47,6 +47,12 @@ nav: cops
         <option value="none">doesn't autocorrect</option>
       </select>
     </label>
+    <label>project index
+      <select name="index">
+        <option value="">any</option>
+        <option value="yes">uses it</option>
+      </select>
+    </label>
     <button type="reset" class="link-button">clear</button>
   </div>
 </form>
@@ -60,7 +66,7 @@ nav: cops
         <% unless department[:plugin] == "rubocop" %><span class="from"><%= department[:plugin] %> <%= plugins[department[:plugin]] %></span><% end %>
       </h2>
       <ul>
-<% department[:cops].each do |cop| %><li data-status="<%= cop[:status] %>" data-fix="<%= cop[:autocorrect] || "none" %>"><a class="name" href="<%= cop[:url] %>"><%= cop[:name] %></a><span class="desc"><%= code_spans cop[:description] %></span><span class="tags"><span class="sq <%= cop[:status] %>"><%= status_label cop[:status] %></span><%= fix_badge cop[:autocorrect] %><span class="since"><%= cop[:added] %></span></span></li>
+<% department[:cops].each do |cop| %><li data-status="<%= cop[:status] %>" data-fix="<%= cop[:autocorrect] || "none" %>"<% if cop[:index] %> data-index="yes"<% end %>><a class="name" href="<%= cop[:url] %>"><%= cop[:name] %></a><span class="desc"><%= code_spans cop[:description] %></span><span class="tags"><span class="sq <%= cop[:status] %>"><%= status_label cop[:status] %></span><%= fix_badge cop[:autocorrect] %><span class="since"><%= cop[:added] %></span></span></li>
 <% end %>
       </ul>
     </section>
@@ -74,5 +80,6 @@ nav: cops
   <span><span class="sq disabled">opt-in</span>: off unless enabled</span>
   <span><%= fix_badge "safe" %> fixed by <code>rubocop -a</code></span>
   <span><%= fix_badge "unsafe" %> only by <code>rubocop -A</code></span>
+  <span><span class="tag">project index</span> uses <a href="<%= site.metadata.docs_url %>usage/project_index.html">the project index</a> when it's on</span>
   <span>numbers: the version that added it</span>
 </p>

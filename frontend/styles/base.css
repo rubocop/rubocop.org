@@ -104,6 +104,20 @@ p code, li code {
   border-radius: 3px;
 }
 
+/* A small label, like a post among the releases or a cop that uses the
+   project index. That one is generated, so the cop search doesn't find it. */
+.tag, .cop-list [data-index] .desc::after {
+  padding: 0 .3rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink-3);
+  font: 400 11px/1.4 var(--mono);
+  font-stretch: 87.5%;
+  white-space: nowrap;
+}
+
+.cop-list [data-index] .desc::after { content: "project index"; margin-left: .45rem; }
+
 ::selection { background: var(--red); color: #fff; }
 
 main {

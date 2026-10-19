@@ -58,8 +58,14 @@ module Builders
         name: cop.cop_name, department: cop.department.to_s, plugin:,
         description: settings['Description'].to_s, status: status(settings['Enabled']),
         autocorrect: autocorrect(cop, settings), added: settings['VersionAdded'].to_s,
-        url: RubocopHTML.docs_url(cop.cop_name, plugin)
+        url: RubocopHTML.docs_url(cop.cop_name, plugin), index: project_index?(cop)
       }
+    end
+
+    # The cops that use the project index include a mixin of it. The index
+    # is experimental, so a RuboCop without the mixin just has none.
+    def project_index?(cop)
+      RuboCop::Cop.const_defined?(:ProjectIndexHelp) && cop.include?(RuboCop::Cop::ProjectIndexHelp)
     end
 
     def status(enabled)

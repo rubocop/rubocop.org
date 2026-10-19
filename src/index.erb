@@ -11,6 +11,7 @@ progress: true
   editor = site.data.editor
   grid = site.data.departments.select { |department| department[:plugin] == "rubocop" }.sort_by { |department| -department[:cops].size }
   counts = grid.flat_map { |department| department[:cops] }.map { |cop| cop[:status] }.tally
+  indexed = site.data.cops.count { |cop| cop[:index] }
 %>
 <section class="hero" data-sec>
   <div>
@@ -28,6 +29,7 @@ progress: true
       <div class="install-line" id="install-line" role="tabpanel" aria-label="Install command"><span class="p">$</span><code>gem install rubocop</code><button type="button" class="copy link-button">copy</button></div>
     </div>
     <p class="install-note" id="install-note" hidden></p>
+    <p class="comment extras"># optional: <a href="#project-index">rubydex</a> for cross-file checks, <a href="#agents">mcp</a> for agents</p>
 
     <p class="meta">
       <% if release %>
@@ -50,7 +52,13 @@ progress: true
     <h2>What it checks</h2>
     <p>Every check is a <em>cop</em>, and cops live in departments. <code>Lint</code> catches code that's probably a bug, <code>Style</code>, <code>Layout</code> and <code>Naming</code> keep a codebase consistent, <code>Metrics</code> flags methods and classes that got too big, and <code>Security</code> spots the usual footguns.</p>
     <p>Most cops come straight from a guideline in the style guide, and most of them can fix what they find.</p>
-    <p class="more"><a href="<%= relative_url "/cops/" %>">Browse all the cops &rarr;</a></p>
+    <% if indexed.positive? %>
+    <p id="project-index">Normally each cop sees one file at a time. Add the optional <code>rubydex</code> gem and set <code>UseProjectIndex: true</code> under <code>AllCops</code>, and RuboCop indexes the whole project first. The index serves <a href="<%= relative_url "/cops/" %>?index=yes"><%= indexed %> cops</a>: <code>Lint/DuplicateMethods</code> catches a method defined twice in different files, others stop flagging code that's fine once they can see the rest of the project, and a few new ones, like <code>Lint/NameTypo</code>, only work with it. It's experimental and needs Ruby 3.2 or newer.</p>
+    <% end %>
+    <p class="more">
+      <a href="<%= relative_url "/cops/" %>">Browse all the cops &rarr;</a>
+      <a href="<%= site.metadata.docs_url %>usage/project_index.html">The project index &rarr;</a>
+    </p>
   </div>
   <div class="cops-grid" data-src="<%= relative_url "/cops.json" %>">
     <div class="cops-head">Inspecting <%= counts.values.sum %> cops</div>
@@ -155,7 +163,7 @@ progress: true
   </div>
 </section>
 
-<section class="s" data-sec>
+<section class="s" id="agents" data-sec>
   <div class="txt">
     <h2>In your agent</h2>
     <p>Coding agents run RuboCop far more often than people do, and everything it prints ends up in their context. <code>rubocop --mcp</code> gives them inspection, autocorrection and cop explanations as tools, answered by a RuboCop that's already loaded. It needs the <code>mcp</code> gem.</p>
