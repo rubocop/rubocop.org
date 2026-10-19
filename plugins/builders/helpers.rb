@@ -16,7 +16,7 @@ module Builders
 
     def build
       %i[
-        page_title code_spans delimited cop_link status_label fix_badge terminal terminal_tabs
+        page_title code_spans delimited cop_link status_label fix_badge terminal terminal_tabs editor_tabs
         news latest_release release_post
       ].each do |name|
         helper name
@@ -69,16 +69,14 @@ module Builders
 
     # Several runs behind tabs, the first one showing. Keys are tab labels.
     def terminal_tabs(prefix, runs)
-      buttons, panes = runs.each_with_index.map do |(label, run), i|
-        tab = "#{prefix}-tab-#{i}"
-        pane = "#{prefix}-#{i}"
-        button = { type: 'button', role: 'tab', id: tab, aria_selected: i.zero?.to_s, aria_controls: pane }
-        [
-          "<button#{html_attributes(button, prefix_space: true)}>#{label}</button>",
-          terminal(run, id: pane, role: 'tabpanel', aria_labelledby: tab, tabindex: 0, hidden: !i.zero?)
-        ]
-      end.transpose
-      %(<div class="term-tabs" role="tablist">#{buttons.join}</div>#{panes.join}).html_safe
+      tabs(prefix, runs) { |run, **attributes| terminal(run, **attributes) }
+    end
+
+    # A file the way an editor running the language server shows it, a state
+    # of it per tab: its diagnostics underlined, and one of them opened up
+    # under its line with its quick fixes. Editor lays the lines out.
+    def editor_tabs(prefix, states)
+      tabs(prefix, states) { |state, **attributes| editor(state, **attributes) }
     end
 
     # The latest releases and Meta Redux posts, newest first.
@@ -100,6 +98,46 @@ module Builders
     def release_post(release)
       slug = "rubocop-#{release[:version][/\A\d+\.\d+/].tr('.', '-')}"
       site.data.posts.find { |post| post[:url].match?(%r{/#{slug}(?:\.html)?\z}) }
+    end
+
+    private
+
+    # Panes behind tabs, the first one showing. Keys are tab labels, and the
+    # block renders a pane with the attributes it's given.
+    def tabs(prefix, panes)
+      buttons, html = panes.each_with_index.map do |(label, pane), i|
+        tab = "#{prefix}-tab-#{i}"
+        id = "#{prefix}-#{i}"
+        button = { type: 'button', role: 'tab', id: tab, aria_selected: i.zero?.to_s, aria_controls: id }
+        [
+          "<button#{html_attributes(button, prefix_space: true)}>#{label}</button>",
+          yield(pane, id:, role: 'tabpanel', aria_labelledby: tab, tabindex: 0, hidden: !i.zero?)
+        ]
+      end.transpose
+      %(<div class="term-tabs" role="tablist">#{buttons.join}</div>#{html.join}).html_safe
+    end
+
+    def editor(lines, **attributes)
+      html = lines.each_with_index.map do |line, i|
+        code = line[:segments].map { |text, diagnostic| diagnostic ? squiggle(text, diagnostic) : CGI.escapeHTML(text) }
+        %(<span class="ln"><span class="gutter">#{i + 1}</span>#{code.join}</span>#{peek(line[:open]) if line[:open]})
+      end
+      "<pre#{html_attributes(attributes, prefix_space: true)}>#{html.join}</pre>".html_safe
+    end
+
+    # Underlined, with the message on hover and for screen readers.
+    def squiggle(text, diagnostic)
+      message = CGI.escapeHTML(diagnostic[:message])
+      %(<span class="squiggle s#{diagnostic[:severity]}" title="#{message}">#{CGI.escapeHTML(text)}</span>) +
+        %(<span class="sr-only"> (#{message})</span>)
+    end
+
+    # A diagnostic spelled out, the way an editor shows it on hover, with the
+    # quick fixes the server offers for it.
+    def peek(diagnostic)
+      fixes = diagnostic[:fixes].map { |fix| %(<span class="fix">#{CGI.escapeHTML(fix)}</span>) }
+      %(<span class="peek s#{diagnostic[:severity]}">#{code_spans(diagnostic[:message])}) +
+        %(<span class="via">RuboCop(#{cop_link(diagnostic[:cop])})</span>#{fixes.join}</span>)
     end
   end
 end

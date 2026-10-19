@@ -8,6 +8,7 @@ progress: true
   post = release && release_post(release)
   runs = site.data.runs
   walk = site.data.walkthrough
+  editor = site.data.editor
   grid = site.data.departments.select { |department| department[:plugin] == "rubocop" }.sort_by { |department| -department[:cops].size }
   counts = grid.flat_map { |department| department[:cops] }.map { |cop| cop[:status] }.tally
 %>
@@ -139,19 +140,46 @@ progress: true
 
 <section class="s" data-sec>
   <div class="txt">
-    <h2>Where it runs</h2>
-    <p>On your machine, in your editor, in CI and, these days, inside your coding agent. The output fits wherever it ends up.</p>
-    <dl class="flags">
-      <dt>--lsp</dt><dd>A built-in language server: offenses as you type and format-on-save in VS Code, RubyMine, Emacs, Neovim, Helix, Zed and friends.</dd>
-      <dt>--format github</dt><dd>Offenses show up as annotations on pull requests. <code>sarif</code> feeds code scanning, <code>junit</code> the rest of CI.</dd>
-      <dt>--changed</dt><dd>Only looks at the files git says changed.</dd>
-      <dt>--explain</dt><dd>What a cop checks, its examples and how your project configures it, for when an offense message isn't enough.</dd>
-      <dt>--mcp</dt><dd>Inspection, autocorrection and cop explanations for coding agents, over the Model Context Protocol.</dd>
-      <dt>--server</dt><dd>Keeps a warm process around, so runs start instantly.</dd>
-    </dl>
+    <h2>In your editor</h2>
+    <p>RuboCop has a language server built in. Your editor gets offenses as you type, a quick fix for each one, and RuboCop's corrections as a formatter, which most editors can run on save. It's the same RuboCop with the same config your CI runs.</p>
+    <p>Ruby LSP, which the docs recommend for most editors, runs RuboCop for you. Otherwise point your editor's LSP client at <code>rubocop --lsp</code>, or install the vscode-rubocop extension. RubyMine has RuboCop support of its own.</p>
+    <p>For editors that just shell out to <code>rubocop</code>, <code>--server</code> keeps a warm process around, so each run starts instantly. It isn't available on Windows or JRuby.</p>
+    <p class="more">
+      <a href="<%= site.metadata.docs_url %>integration_with_other_tools.html#editor-integration">Editor setup &rarr;</a>
+      <a href="<%= site.metadata.docs_url %>usage/lsp.html">The language server &rarr;</a>
+    </p>
+  </div>
+  <div class="term lsp" role="group" aria-label="<%= editor[:file] %> in an editor running rubocop --lsp">
+    <span class="lsp-file" aria-hidden="true"><%= editor[:file] %></span>
+    <%= editor_tabs "ed", "as you type" => editor[:typing], "after saving" => editor[:saved] %>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>In your agent</h2>
+    <p>Coding agents run RuboCop far more often than people do, and everything it prints ends up in their context. <code>rubocop --mcp</code> gives them inspection, autocorrection and cop explanations as tools, answered by a RuboCop that's already loaded. It needs the <code>mcp</code> gem.</p>
+    <p>From the shell, <code>--format json</code> tells an agent which offenses autocorrection can fix and the edits it would make, <code>--explain</code> tells it what a cop wants when the message isn't enough, and <code>--max-offenses-per-cop</code> keeps an old codebase from flooding its context.</p>
+    <p>An agent told to make RuboCop pass can disable its way there. Enable <a href="<%= site.data.cop_urls["Style/DisableCopsWithinSourceCodeDirective"] %>">the cop that polices <code>rubocop:disable</code> comments</a> with <code>AllowWithReason</code>, and every one of them needs a reason, so whoever reviews the change sees why.</p>
+    <p class="more">
+      <a href="<%= site.metadata.docs_url %>usage/ai_agents.html">RuboCop and coding agents &rarr;</a>
+      <a href="<%= site.metadata.docs_url %>usage/mcp.html">The MCP server &rarr;</a>
+    </p>
   </div>
   <div class="term">
-    <%= terminal_tabs "format", "-f offenses" => runs[:offenses], "-f worst" => runs[:worst], "-f github" => runs[:github], "-f json" => runs[:json] %>
+    <%= terminal_tabs "agent", "-f json" => runs[:json], "--explain" => runs[:explain] %>
+  </div>
+</section>
+
+<section class="s" data-sec>
+  <div class="txt">
+    <h2>In CI</h2>
+    <p>Offenses can land right on the pull request. <code>--format github</code> turns them into annotations, <code>sarif</code> feeds code scanning and <code>junit</code> the rest of CI. <code>--fail-level</code> decides which severities fail the build, and <code>--changed=main...</code> checks only the files a branch changed since it forked.</p>
+    <p>When there's too much to read, <code>-f offenses</code> and <code>-f worst</code> show where the offenses pile up.</p>
+    <p class="more"><a href="<%= site.metadata.docs_url %>formatters.html">Formatters &rarr;</a></p>
+  </div>
+  <div class="term">
+    <%= terminal_tabs "format", "-f github" => runs[:github], "-f offenses" => runs[:offenses], "-f worst" => runs[:worst] %>
   </div>
 </section>
 

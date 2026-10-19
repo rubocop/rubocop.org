@@ -117,22 +117,63 @@
   text-align: center;
 }
 
-/* where it runs */
+/* in your editor: a file the way an editor running the language server
+   shows it, with the severities in the colors RuboCop prints them in. Hints
+   are refactor and info offenses, which it prints in yellow. */
 
-dl.flags { margin: 1.6rem 0 0; }
+.lsp { --gutter-width: 3.4em; position: relative; }
 
-dl.flags dt {
-  font: 500 13px/1.65 var(--mono);
-  font-stretch: 87.5%;
-  white-space: nowrap;
+.lsp-file {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: .55rem .9rem;
+  color: var(--term-dim);
 }
 
-dl.flags dd {
-  margin: .1rem 0 1rem;
-  color: var(--ink-2);
-  font-size: 15.5px;
-  line-height: 1.55;
+.lsp pre { padding-left: 0; }
+
+/* a long line wraps past the line numbers */
+.lsp .ln {
+  display: block;
+  padding-left: var(--gutter-width);
+  text-indent: calc(-1 * var(--gutter-width));
 }
+
+.lsp .gutter {
+  display: inline-block;
+  width: var(--gutter-width);
+  padding-right: 1.2em;
+  color: var(--term-dim);
+  text-align: right;
+  text-indent: 0;
+  user-select: none;
+}
+
+.lsp .s1 { --severity: var(--t-red); }
+.lsp .s2 { --severity: var(--t-magenta); }
+.lsp :is(.s3, .s4) { --severity: var(--t-yellow); }
+
+.lsp .squiggle {
+  text-decoration: underline wavy var(--severity);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 4px;
+}
+
+.lsp .peek {
+  display: block;
+  margin: .4rem 1.1rem .6rem var(--gutter-width);
+  padding: .55rem .8rem;
+  border: 1px solid var(--term-rule);
+  border-left: 2px solid var(--severity);
+  text-indent: 0;
+  white-space: pre-wrap;
+}
+
+.lsp .via { display: block; color: var(--term-dim); }
+.lsp .fix { display: block; }
+.lsp .via + .fix { margin-top: .45rem; padding-top: .45rem; border-top: 1px solid var(--term-rule); }
+.lsp .fix::before { content: "› "; content: "› " / ""; color: var(--term-dim); }
 
 /* news and history, as logs */
 
@@ -248,4 +289,8 @@ dl.flags dd {
   /* all the steps on one line */
   .walk { --step: .6rem; }
   .walk [role="tab"] { padding-inline: .4rem; }
+}
+
+@media (max-width: 480px) {
+  .lsp-file { display: none; }
 }

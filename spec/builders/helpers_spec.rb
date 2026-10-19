@@ -62,6 +62,27 @@ RSpec.describe Builders::Helpers do
     end
   end
 
+  describe '#editor_tabs' do
+    let(:state) do
+      diagnostic = { cop: 'Style/StringLiterals', severity: 3, message: 'Style/StringLiterals: Prefer `x`.',
+                     fixes: ['Autocorrect Style/StringLiterals'] }
+      [
+        { segments: [['x = 1', nil]] },
+        { segments: [['name = ', nil], ["'x'", diagnostic], [' + "y"', nil]], open: diagnostic }
+      ]
+    end
+
+    let(:html) { helpers.editor_tabs('ed', 'as you type' => state) }
+
+    it 'underlines each diagnostic, with its message for screen readers' do
+      expect(html).to include('Prefer `x`.">&#39;x&#39;</span><span class="sr-only"> (Style/StringLiterals: Prefer')
+    end
+
+    it 'opens up the chosen one under its line, with its fixes' do
+      expect(html).to match(%r{&quot;y&quot;</span><span class="peek s3">.*<span class="fix">Autocorrect Style/})
+    end
+  end
+
   describe '#terminal_tabs' do
     let(:runs) do
       { 'rubocop' => { command: 'rubocop', output: '' }, 'rubocop -a' => { command: 'rubocop -a', output: '' } }

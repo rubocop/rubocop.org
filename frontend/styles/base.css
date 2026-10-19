@@ -98,7 +98,7 @@ code {
   font-size: .86em;
 }
 
-p code, li code, dd code {
+p code, li code {
   background: var(--paper-2);
   padding: .1em .35em;
   border-radius: 3px;

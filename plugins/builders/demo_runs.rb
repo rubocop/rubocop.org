@@ -19,6 +19,7 @@ module Builders
       worst: %w[-f worst],
       github: %w[-f github],
       json: %w[-f json],
+      explain: %w[--explain Style/StringLiterals],
       # How it works follows the offense in this file alone, which the other
       # runs leave out.
       walk: %w[lib/user.rb],
@@ -69,12 +70,15 @@ module Builders
     end
 
     # The whole JSON report is long, so show one offense the way you'd pull
-    # it out with jq.
+    # it out with jq, and one that comes with the edits that fix it.
     def json_sample(command, output)
       report = JSON.parse(output)
-      index = report['files'].index { |file| file['offenses'].any? }
-      offense = report['files'][index]['offenses'].first
-      { command: "#{command} | jq '.files[#{index}].offenses[0]'", output: JSON.pretty_generate(offense) }
+      file = report['files'].index { |entry| entry['offenses'].any? { |offense| offense.key?('correction') } }
+      raise 'no offense in the demo comes with a correction' unless file
+
+      offenses = report['files'][file]['offenses']
+      index = offenses.index { |offense| offense.key?('correction') }
+      { command: "#{command} | jq '.files[#{file}].offenses[#{index}]'", output: JSON.pretty_generate(offenses[index]) }
     end
   end
 end
