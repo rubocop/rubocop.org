@@ -9,9 +9,12 @@ name: Deploy to GitHub pages
   # checks instead of the next deploy.
   pull_request:
   # The site shows live data (releases, stars, posts), so rebuild it daily.
-  # A new RuboCop release shows up by the next morning.
   schedule:
     - cron: "17 5 * * *"
+  # RuboCop's release workflow sends this once a release is out, so the
+  # release shows up right away.
+  repository_dispatch:
+    types: [rubocop-release]
   workflow_dispatch:
 
 concurrency:
