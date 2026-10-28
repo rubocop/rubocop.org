@@ -50,16 +50,23 @@
 
 .facets label { display: inline-flex; align-items: center; gap: .45rem; }
 
-.facets select {
-  padding: .3rem 1.6rem .3rem .5rem;
-  background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238b8b85' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right .5rem center;
+.facets :is(select, input) {
+  padding: .3rem .5rem;
+  background: var(--paper);
   border: 1px solid var(--rule);
   border-radius: 3px;
   color: var(--ink);
   font: inherit;
+}
+
+.facets select {
+  padding-right: 1.6rem;
+  background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238b8b85' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right .5rem center;
   appearance: none;
   cursor: pointer;
 }
+
+.facets input::placeholder { color: var(--ink-3); }
 
 /* Most departments are off screen at first, so skip laying them out. */
 .dept-group {
@@ -160,5 +167,5 @@
 
 /* iOS zooms in on any field under 16px when it gets focus. */
 @media (pointer: coarse) {
-  .query input, .facets select { font-size: 16px; }
+  .query input, .facets :is(select, input) { font-size: 16px; }
 }

@@ -92,10 +92,16 @@ async function checkCopFilters(browser, site) {
     ["q=Style/*Literal*", 2, `/^Style\\/.*Literal/.test(row.querySelector(".name").textContent)`],
     ["status=pending&fix=none", 1, `row.dataset.status === "pending" && row.dataset.fix === "none"`],
     ["index=yes", 1, `row.dataset.index === "yes"`],
+    ["since=1.80", 1, `row.closest(".dept-group").dataset.plugin === "rubocop" && newer(row, 1, 80)`],
+    ["department=Rails&since=2.30", 1, `row.closest(".dept-group").dataset.plugin === "rubocop-rails" && newer(row, 2, 30)`],
   ]
   for (const [query, least, test] of cases) {
     const page = await browser.open(`${site}cops/?${query}`)
     const shown = `(() => {
+      const newer = (row, major, minor) => {
+        const [a, b] = row.querySelector(".since").textContent.split(".").map(Number)
+        return a > major || (a === major && b > minor)
+      }
       const rows = [...document.querySelectorAll(".cop-list li:not([hidden])")]
       return rows.length >= ${least} && rows.every((row) => ${test})
     })()`
