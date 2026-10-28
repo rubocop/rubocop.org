@@ -3,6 +3,7 @@ version: 2
 updates:
   # New RuboCop releases reach the site through these updates: the cop index,
   # the runs on the home page and the playground all come from the bundle.
+  # merge-rubocop-updates.yml merges them once their checks pass.
   - package-ecosystem: bundler
     directory: /
     schedule:

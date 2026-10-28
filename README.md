@@ -52,7 +52,7 @@ Most of what the site shows comes from RuboCop itself, at build time:
 
 `plugins/rubocop_html.rb` turns RuboCop's terminal output into HTML wherever the site shows it.
 
-So a new RuboCop release reaches the site by bumping the gems in `Gemfile.lock`, which Dependabot does.
+So a new RuboCop release reaches the site by bumping the gems in `Gemfile.lock`. Dependabot opens the update, and [a workflow](.github/workflows/merge-rubocop-updates.yml) merges it once its checks pass. A major release waits for someone to look at it.
 
 The core team, the history log and the plugin list are plain data in `src/_data/`.
 
