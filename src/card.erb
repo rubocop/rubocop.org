@@ -1,0 +1,41 @@
+---
+permalink: /card.html
+layout: none
+---
+<!doctype html>
+<%# The picture link previews show. bin/draw-card.js takes it at 1200x630. %>
+<html lang="<%= site.locale %>" data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <title>RuboCop</title>
+    <link rel="icon" href="<%= relative_url "/images/favicon.svg" %>" type="image/svg+xml">
+    <link rel="stylesheet" href="<%= asset_path :css %>">
+    <style>
+      .card {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 40px;
+        box-sizing: border-box;
+        width: 1200px;
+        height: 630px;
+        margin: 0;
+        padding: 56px 64px 0;
+        overflow: hidden;
+      }
+
+      .card-head { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+      .card .logo { width: 360px; height: auto; }
+      .card .comment { font-size: 19px; text-align: right; }
+      .card .term { border-bottom: 0; border-radius: 8px 8px 0 0; font-size: 19px; }
+      .card .term pre { padding: 24px 28px; white-space: pre; }
+    </style>
+  </head>
+  <body class="card">
+    <div class="card-head">
+      <%= render "logo" %>
+      <span class="comment"># <%= site.metadata.tagline %></span>
+    </div>
+    <div class="term"><%= terminal site.data.runs[:lint] %></div>
+  </body>
+</html>

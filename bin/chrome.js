@@ -1,5 +1,5 @@
-// Headless Chrome for bin/check-pages.js: a server for the built site, and
-// just enough of the DevTools protocol to drive pages.
+// Headless Chrome for bin/check-pages.js and bin/draw-card.js: a server for
+// the built site, and just enough of the DevTools protocol to drive pages.
 //
 // BASE_PATH serves the site where it was built for, and CHROME names the
 // browser when it isn't installed in the usual place.

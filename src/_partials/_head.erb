@@ -5,8 +5,13 @@
 
 <meta property="og:title" content="<%= page_title resource.data.title %>">
 <meta property="og:description" content="<%= resource.data.description || site.metadata.description %>">
-<meta property="og:image" content="<%= absolute_url "/images/rubo-logo-horizontal.png" %>">
+<%# bin/draw-card.js draws it from src/card.erb when the site deploys. %>
+<meta property="og:image" content="<%= absolute_url "/images/card.png" %>">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The RuboCop logo above a run of rubocop in a terminal">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="icon" href="<%= relative_url "/images/favicon.ico" %>" sizes="32x32">
 <link rel="icon" href="<%= relative_url "/images/favicon.svg" %>" type="image/svg+xml">

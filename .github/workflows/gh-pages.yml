@@ -56,6 +56,9 @@ jobs:
           # avoids the anonymous rate limit of the GitHub API
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Draw the picture for link previews
+        run: bin/draw-card.js
+
       - name: Check the pages in a browser
         run: bin/check-pages.js
 
