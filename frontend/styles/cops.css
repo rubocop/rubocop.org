@@ -100,7 +100,7 @@
   overflow-wrap: anywhere;
 }
 
-.cop-list .desc { color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+.cop-list .desc { color: var(--ink-2); font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
 .cop-list .desc code { background: var(--paper-2); padding: .05em .3em; border-radius: 3px; }
 
 .cop-list .tags, .key {
