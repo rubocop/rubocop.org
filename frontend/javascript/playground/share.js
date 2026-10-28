@@ -12,10 +12,14 @@ function fromBase64Url(text) {
   return Uint8Array.from(atob(text.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0))
 }
 
-export async function shareLink(data) {
+// The part of a link after the #. bin/check-pages.js builds links with it too.
+export async function shareHash(data) {
   const stream = new Blob([JSON.stringify(data)]).stream().pipeThrough(new CompressionStream("deflate-raw"))
-  const packed = toBase64Url(new Uint8Array(await new Response(stream).arrayBuffer()))
-  return `${location.origin}${location.pathname}#${PREFIX}${packed}`
+  return `${PREFIX}${toBase64Url(new Uint8Array(await new Response(stream).arrayBuffer()))}`
+}
+
+export async function shareLink(data) {
+  return `${location.origin}${location.pathname}#${await shareHash(data)}`
 }
 
 // Links come from anywhere, so only strings get through.

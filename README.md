@@ -7,7 +7,8 @@ The site is meant to complement the [docs](https://docs.rubocop.org), not repeat
 ## Prerequisites
 
 - [Ruby](https://www.ruby-lang.org/en/downloads/) >= 3.2
-- [Node.js](https://nodejs.org) >= 20
+- [Node.js](https://nodejs.org) >= 22
+- [Google Chrome](https://www.google.com/chrome/), for the page checks
 - [Bundler](https://bundler.io/)
 
 ## Setup
@@ -31,6 +32,13 @@ bin/rubocop
 bundle exec rspec
 ```
 
+Then there are checks on a production build (a development build adds live reload, which the page checks count as an error):
+
+```sh
+BRIDGETOWN_ENV=production BASE_PATH=/ bin/bridgetown deploy
+bin/check-pages.js   # every page in headless Chrome, the playground included
+```
+
 ## How the pages are built
 
 Most of what the site shows comes from RuboCop itself, at build time:
@@ -51,6 +59,6 @@ The fonts are Martian Grotesk and Martian Mono by Evil Martians, under the SIL O
 
 ## Deployment
 
-The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy` and deploys the `output/` directory on every push to `main` and once a day, to pick up new releases and posts.
+The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy`, runs the page checks on it and deploys the `output/` directory on every push to `main` and once a day, to pick up new releases and posts.
 
 The workflow automatically sets `BASE_PATH` based on the repository. Forks get `/rubocop.org` so the site works at `<username>.github.io/rubocop.org/`, while the main repo uses `/` for the `rubocop.org` custom domain.

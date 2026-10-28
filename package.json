@@ -8,6 +8,7 @@
     "esbuild-dev": "node esbuild.config.js --watch"
   },
   "devDependencies": {
+    "axe-core": "^4.14.0",
     "esbuild": "^0.28.2",
     "glob": "^13.0.6",
     "postcss": "^8.5.29",

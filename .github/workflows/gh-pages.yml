@@ -29,6 +29,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       BRIDGETOWN_ENV: production
       BASE_PATH: >-
@@ -54,6 +55,9 @@ jobs:
         env:
           # avoids the anonymous rate limit of the GitHub API
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check the pages in a browser
+        run: bin/check-pages.js
 
       - name: Upload build artifact
         if: github.ref == 'refs/heads/main'
