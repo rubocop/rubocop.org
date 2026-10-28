@@ -58,8 +58,22 @@ module Builders
         name: cop.cop_name, department: cop.department.to_s, plugin:,
         description: settings['Description'].to_s, status: status(settings['Enabled']),
         autocorrect: autocorrect(cop, settings), added: settings['VersionAdded'].to_s,
-        url: RubocopHTML.docs_url(cop.cop_name, plugin), index: project_index?(cop)
+        url: RubocopHTML.docs_url(cop.cop_name, plugin), guide: guide_url(cop, config, settings),
+        index: project_index?(cop)
       }
+    end
+
+    # The guideline the cop enforces, against the style guide of its
+    # department, as RuboCop links to it. RuboCop's own MessageAnnotator
+    # caches the links by guideline alone, which mixes up guidelines of the
+    # same name in different guides, like Style/ClassCheck's and
+    # RSpec/ClassCheck's.
+    def guide_url(cop, config, settings)
+      guide = settings['StyleGuide'].to_s
+      return if guide.empty?
+
+      base = config.for_department(cop.department.to_s)['StyleGuideBaseURL'] || config.for_all_cops['StyleGuideBaseURL']
+      base.to_s.empty? ? guide : URI.join(base, guide).to_s
     end
 
     # The cops that use the project index include a mixin of it. The index

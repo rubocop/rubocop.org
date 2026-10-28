@@ -13,7 +13,8 @@ require 'cgi'
 require 'net/http'
 require 'uri'
 
-HOSTS = %w[docs.rubocop.org rubystyle.guide github.com metaredux.com].freeze
+# The style guides of the plugins live on subdomains of rubystyle.guide.
+HOSTS = /\A(docs\.rubocop\.org|([\w-]+\.)?rubystyle\.guide|github\.com|metaredux\.com)\z/
 # Pages fetched at once.
 THREADS = 8
 HEADERS = { 'User-Agent' => 'rubocop.org link check' }.freeze
@@ -27,7 +28,7 @@ def links(dir)
   Dir.glob('**/*.html', base: dir).each_with_object(Hash.new { |links, url| links[url] = Set.new }) do |file, links|
     File.read(File.join(dir, file)).scan(/href="(https?:[^"]+)"/) do |(href)|
       url = CGI.unescapeHTML(href)
-      links[url] << "/#{file.delete_suffix('index.html')}" if HOSTS.include?(URI(url).host)
+      links[url] << "/#{file.delete_suffix('index.html')}" if HOSTS.match?(URI(url).host)
     rescue URI::InvalidURIError
       next
     end
@@ -52,8 +53,10 @@ def request(url, attempt = 1)
   request(url, attempt + 1)
 end
 
+# GitHub prefixes the ids of a README's headings with user-content-, and its
+# script finds them by the fragment without it.
 def ids(html)
-  html.scan(/\s(?:id|name)="([^"]+)"/).flatten.to_set
+  html.scan(/\s(?:id|name)="(?:user-content-)?([^"]+)"/).flatten.to_set
 end
 
 # What's wrong with the links to one page.
