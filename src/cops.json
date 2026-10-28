@@ -1,4 +1,5 @@
 ---
 permalink: /cops.json
+template_engine: erb
 ---
 <%== JSON.generate(site.data.cops.map { |cop| cop.slice(:name, :department, :plugin, :status, :autocorrect, :added, :description, :url) }) %>
