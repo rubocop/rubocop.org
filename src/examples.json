@@ -1,0 +1,5 @@
+---
+permalink: /playground/examples.json
+template_engine: erb
+---
+<%== JSON.generate(site.data.examples) %>

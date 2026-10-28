@@ -14,7 +14,8 @@ main_class: pg
      data-runtime="<%= playground.runtime_url %>"
      data-runtime-size="<%= playground.runtime_size %>"
      data-gems="<%= relative_url "/playground/#{playground.bundle}" %>"
-     data-gems-size="<%= playground.bundle_size %>">
+     data-gems-size="<%= playground.bundle_size %>"
+     data-examples="<%= relative_url "/playground/examples.json" %>">
   <div class="page-head">
     <h1>Playground</h1>
     <p class="comment"># RuboCop <%= site.data.rubocop.version %> on Ruby <%= playground.ruby %>, compiled to WebAssembly. Your code stays in this tab.</p>

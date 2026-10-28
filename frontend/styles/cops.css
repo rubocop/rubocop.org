@@ -130,6 +130,9 @@
 .fx.unsafe { border-style: dashed; }
 .fx.none { visibility: hidden; }
 .since { min-width: 3.4rem; text-align: right; }
+.try { min-width: 1.8rem; }
+/* The one link in a row that stays in the site, so it looks like a link. */
+.cop-list a.try { color: var(--ink-2); text-decoration-line: underline; }
 
 .no-match { padding: 2rem 0; color: var(--ink-3); font: 400 14px/1.6 var(--mono); }
 

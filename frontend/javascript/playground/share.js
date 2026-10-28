@@ -1,6 +1,7 @@
 // Playground state travels in the URL hash, deflated and base64url-encoded,
 // so a link carries the code without any server keeping it.
 const PREFIX = "v1="
+const COP = "cop="
 
 function toBase64Url(bytes) {
   let binary = ""
@@ -29,14 +30,23 @@ function clean(data) {
   return { code: text(data.code), config: text(data.config), file: text(data.file), mode: text(data.mode) }
 }
 
-// A shared link wins over the last draft from this browser.
-export async function readShared() {
+// A shared link wins over the last draft from this browser. So does a link
+// from the cop index, which names a cop whose example is in `examples`.
+export async function readShared(examples) {
   const hash = location.hash.slice(1)
   if (hash.startsWith(PREFIX)) {
     try {
       const stream = new Blob([fromBase64Url(hash.slice(PREFIX.length))]).stream().pipeThrough(new DecompressionStream("deflate-raw"))
       return clean(JSON.parse(await new Response(stream).text()))
     } catch { /* a mangled link falls back to the draft */ }
+  }
+  // A cop the site has no example of falls back to the draft too.
+  if (hash.startsWith(COP)) {
+    try {
+      const all = await (await fetch(examples)).json()
+      const cop = decodeURIComponent(hash.slice(COP.length))
+      if (Object.hasOwn(all, cop)) return clean(all[cop])
+    } catch { /* and so does a failed download */ }
   }
   try {
     return clean(JSON.parse(localStorage.getItem("playground") || "null"))

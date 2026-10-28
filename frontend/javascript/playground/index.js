@@ -365,7 +365,7 @@ function saveDraft() {
 }
 
 async function main() {
-  const shared = await readShared()
+  const shared = await readShared(page.dataset.examples)
   code = editor(document.getElementById("ed-code"), shared?.code ?? EXAMPLE, ruby, "Ruby code")
   config = editor(document.getElementById("ed-config"), shared?.config ?? EXAMPLE_CONFIG, yaml, "RuboCop configuration")
   if (shared?.file) fileInput.value = shared.file

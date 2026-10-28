@@ -2,7 +2,8 @@
 // Opens the built site in headless Chrome and checks what the specs can't
 // see: every page fits a phone, loads without errors and passes axe in both
 // themes, the keyboard gets around the tabs and the cop grid, the cop filters
-// filter, and the playground runs RuboCop with every cop turned on.
+// filter, and the playground runs RuboCop, on a cop's example from the cop
+// index and with every cop turned on.
 //
 //   bin/check-pages.js [dir]   (output/ by default)
 
@@ -103,11 +104,13 @@ async function checkCopFilters(browser, site) {
   }
 }
 
-// The default example with every cop on, which loads the cops that only
-// require what they need once they're enabled.
+// A cop's example, linked from the cop index, then the default example with
+// every cop on, which loads the cops that only require what they need once
+// they're enabled.
 async function checkPlayground(browser, site) {
   const playground = `${site}playground/`
   const runs = [
+    ["Bundler/OrderedGems's example", `${playground}#cop=Bundler/OrderedGems`, /^Gemfile:\d+:\d+: .*Bundler\/OrderedGems:/m],
     ["every cop", `${playground}#${await shareHash({ config: "AllCops:\n  EnabledByDefault: true\n" })}`, /Style\/Copyright:/],
   ]
   for (const [what, url, expected] of runs) {
