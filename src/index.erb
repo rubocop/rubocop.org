@@ -51,7 +51,7 @@ progress: true
   <div class="txt">
     <h2>What it checks</h2>
     <p>Every check is a <em>cop</em>, and cops live in departments. <code>Lint</code> catches code that's probably a bug, <code>Style</code>, <code>Layout</code> and <code>Naming</code> keep a codebase consistent, <code>Metrics</code> flags methods and classes that got too big, and <code>Security</code> spots the usual footguns.</p>
-    <p>Most cops come straight from a guideline in the style guide, and most of them can fix what they find.</p>
+    <p>Many of them come straight from a guideline in the style guide, and most can fix what they find.</p>
     <% if indexed.positive? %>
     <p id="project-index">Normally each cop sees one file at a time. Add the optional <code>rubydex</code> gem and set <code>UseProjectIndex: true</code> under <code>AllCops</code>, and RuboCop indexes the whole project first. The index serves <a href="<%= relative_url "/cops/" %>?index=yes"><%= indexed %> cops</a>: <code>Lint/DuplicateMethods</code> catches a method defined twice in different files, others stop flagging code that's fine once they can see the rest of the project, and a few new ones, like <code>Lint/NameTypo</code>, only work with it. It's experimental and needs Ruby 3.2 or newer.</p>
     <% end %>
@@ -92,7 +92,7 @@ progress: true
 <section class="s" data-sec>
   <div class="txt">
     <h2>Make it yours</h2>
-    <p>The defaults follow the style guide, but Ruby has never had one true style and RuboCop doesn't pretend otherwise. Most cops support several styles, and it's all set in a single <code>.rubocop.yml</code>, which can inherit from a shared one.</p>
+    <p>The defaults follow the style guide, but Ruby has never had one true style and RuboCop doesn't pretend otherwise. Many cops have settings, over a hundred of them let you pick a style, and it's all set in a single <code>.rubocop.yml</code>, which can inherit from a shared one.</p>
     <p>Adopting it on an old codebase? <code>rubocop --auto-gen-config</code> records every existing offense in <code>.rubocop_todo.yml</code>, so new code meets the standard today and the old debt gets paid off one cop at a time.</p>
     <p>For real-world examples, see how <a href="https://github.com/rails/rails/blob/main/.rubocop.yml">Rails</a>, <a href="https://github.com/gitlabhq/gitlabhq/blob/master/.rubocop.yml">GitLab</a>, <a href="https://github.com/discourse/discourse/blob/main/.rubocop.yml">Discourse</a> and <a href="https://github.com/mastodon/mastodon/blob/main/.rubocop.yml">Mastodon</a> set it up.</p>
     <p class="more"><a href="<%= site.metadata.docs_url %>configuration.html">Configuration &rarr;</a></p>
@@ -119,7 +119,7 @@ progress: true
   <div class="txt">
     <h2>How it works</h2>
     <p>RuboCop never runs your code. It parses each file into a syntax tree, with Prism, or with the parser gem for code that targets Ruby older than 3.3. Then it walks the tree once and calls each cop for the kinds of nodes it asked to see.</p>
-    <p>Most cops are a node pattern and a message. <code>Style/NilComparison</code> asks to see calls to <code>==</code>, <code>===</code> and <code>nil?</code>, and reports the ones its pattern matches.</p>
+    <p>Many cops are little more than a node pattern and a message. <code>Style/NilComparison</code> asks to see calls to <code>==</code>, <code>===</code> and <code>nil?</code>, and reports the ones its pattern matches.</p>
     <p>Corrections don't touch the tree. A cop rewrites the source where its node came from, and RuboCop parses the result and runs the cops again, until a pass changes nothing. That's how one <code>rubocop -a</code> can sort out code that takes several cops in turn.</p>
     <p class="more">
       <a href="https://docs.rubocop.org/rubocop-ast/latest/node_pattern.html">Node patterns &rarr;</a>
