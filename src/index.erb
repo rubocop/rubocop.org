@@ -218,7 +218,7 @@ progress: true
 <section class="s" data-sec>
   <div class="txt">
     <h2>History</h2>
-    <p>I started RuboCop in April 2012 to make it easy to actually follow the <a href="<%= site.metadata.style_guide_url %>">Ruby Style Guide</a>, which I'd started a few months earlier. Fourteen years, two parsers and over 1,100 contributors later, it's how a big chunk of the Ruby world keeps its code in shape.</p>
+    <p>I started RuboCop in April 2012 to make it easy to actually follow the <a href="<%= site.metadata.style_guide_url %>">Ruby Style Guide</a>, which I'd started a few months earlier. <%= in_words(years_since(site.data.history.first[:date])).capitalize %> years, two parsers and over <%= site.data.contributors ? delimited(site.data.contributors / 100 * 100) : "a thousand" %> contributors later, it's how a big chunk of the Ruby world keeps its code in shape.</p>
     <p class="more"><a href="<%= site.metadata.docs_url %>about/history.html">The longer version &rarr;</a></p>
   </div>
   <ul class="log">

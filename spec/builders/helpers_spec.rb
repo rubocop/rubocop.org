@@ -36,6 +36,23 @@ RSpec.describe Builders::Helpers do
     end
   end
 
+  describe '#years_since' do
+    it 'counts a year once its anniversary has come', :aggregate_failures do
+      allow(Date).to receive(:today).and_return(Date.new(2026, 4, 20))
+      expect(helpers.years_since(Date.new(2012, 4, 21))).to eq(13)
+
+      allow(Date).to receive(:today).and_return(Date.new(2026, 4, 21))
+      expect(helpers.years_since(Date.new(2012, 4, 21))).to eq(14)
+    end
+  end
+
+  describe '#in_words' do
+    it 'spells out small numbers and leaves the rest as digits', :aggregate_failures do
+      expect(helpers.in_words(14)).to eq('fourteen')
+      expect(helpers.in_words(21)).to eq('21')
+    end
+  end
+
   describe '#latest_release' do
     let(:releases) do
       [release('2.0.0.rc1', prerelease: true), release('1.90.2', date: '2026-09-20'), release('1.91.0')]

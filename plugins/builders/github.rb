@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module Builders
-  # Fetches the latest releases and the star count from the GitHub API at
-  # build time. Set GITHUB_TOKEN to avoid the anonymous rate limit.
+  # Fetches the latest releases, the star count and the number of
+  # contributors from the GitHub API at build time. Set GITHUB_TOKEN to avoid
+  # the anonymous rate limit.
   class Github < SiteBuilder
     API_URL = 'https://api.github.com/repos/rubocop/rubocop'
 
@@ -16,8 +17,11 @@ module Builders
 
     def build
       hook :site, :post_read do
-        site.data[:releases] = hourly('releases') { fetch_releases } || []
-        site.data[:stars] = hourly('stars') { api('')&.fetch('stargazers_count') }
+        site.data.merge!(
+          releases: hourly('releases') { fetch_releases } || [],
+          stars: hourly('stars') { api('')&.fetch('stargazers_count') },
+          contributors: hourly('contributors') { contributors }
+        )
       end
     end
 
@@ -28,9 +32,24 @@ module Builders
     end
 
     def api(path, params = {})
-      headers = ENV['GITHUB_TOKEN'] ? { 'Authorization' => "Bearer #{ENV['GITHUB_TOKEN']}" } : {}
       body = download("#{API_URL}#{path}", params:, headers:)
       body && JSON.parse(body)
+    end
+
+    # GitHub lists contributors a page at a time, so with one to a page the
+    # last page's number is the count. Commits from addresses without a
+    # GitHub account count too.
+    def contributors
+      response = get("#{API_URL}/contributors", params: { per_page: 1, anon: true }, headers:)
+      response && last_page(response.headers['link'])
+    end
+
+    def last_page(link)
+      link.to_s[/[?&]page=(\d+)>; rel="last"/, 1]&.to_i
+    end
+
+    def headers
+      ENV['GITHUB_TOKEN'] ? { 'Authorization' => "Bearer #{ENV['GITHUB_TOKEN']}" } : {}
     end
 
     def parse_release(release)

@@ -21,9 +21,14 @@ class SiteBuilder < Bridgetown::Builder
   # Returns the body, or nil after a warning. In production a required
   # download raises instead, so a deploy never goes out with missing data and
   # the previous site stays up.
-  def download(url, params: {}, headers: {}, required: true)
+  def download(url, **)
+    get(url, **)&.body
+  end
+
+  # The same, but the whole response, headers and all.
+  def get(url, params: {}, headers: {}, required: true)
     response = Faraday.get(url, params, headers)
-    return response.body if response.success?
+    return response if response.success?
 
     download_failed("#{url} returned #{response.status}", required)
   rescue Faraday::Error => e

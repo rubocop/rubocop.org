@@ -24,6 +24,14 @@ RSpec.describe Builders::Github do
     expect(builder.send(:summarize, notes)).to eq('2 new features, 1 bug fix')
   end
 
+  it 'reads the number of the last page from the Link header', :aggregate_failures do
+    link = '<https://api.github.com/repositories/1/contributors?per_page=1&anon=true&page=2>; rel="next", ' \
+           '<https://api.github.com/repositories/1/contributors?per_page=1&anon=true&page=1134>; rel="last"'
+
+    expect(builder.send(:last_page, link)).to eq(1134)
+    expect(builder.send(:last_page, nil)).to be_nil
+  end
+
   it 'picks out the new cops' do
     release = { 'tag_name' => 'v1.92.0', 'html_url' => 'u', 'prerelease' => false,
                 'published_at' => '2026-10-01T10:00:00Z', 'body' => notes }

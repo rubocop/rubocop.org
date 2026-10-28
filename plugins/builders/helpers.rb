@@ -13,11 +13,15 @@ module Builders
       'unsafe' => ['-A', 'Fixed by rubocop -A, which may change behavior']
     }.freeze
     NEWS_ITEMS = 6
+    NUMBERS = %w[
+      zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen
+      seventeen eighteen nineteen twenty
+    ].freeze
 
     def build
       %i[
-        page_title code_spans delimited cop_link status_label fix_badge terminal terminal_tabs editor_tabs
-        news latest_release release_post
+        page_title code_spans delimited in_words years_since cop_link status_label fix_badge terminal terminal_tabs
+        editor_tabs news latest_release release_post
       ].each do |name|
         helper name
       end
@@ -40,6 +44,17 @@ module Builders
     # 1019 -> "1,019"
     def delimited(number)
       number.to_s.gsub(/(\d)(?=(\d{3})+\z)/, '\1,')
+    end
+
+    # 14 -> "fourteen". Past twenty it's digits.
+    def in_words(number)
+      NUMBERS.fetch(number, number.to_s)
+    end
+
+    # Whole years from the date until today.
+    def years_since(date)
+      today = Date.today
+      today.year - date.year - (today.strftime('%m%d') < date.strftime('%m%d') ? 1 : 0)
     end
 
     def cop_link(name)
