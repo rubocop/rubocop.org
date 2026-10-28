@@ -65,6 +65,32 @@ jobs:
         with:
           path: ./output
 
+      - name: Keep the pages for the link check
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: output/**/*.html
+          retention-days: 1
+
+  # A broken link doesn't hold up the deploy, since the site would go on
+  # linking to the same place either way. Links to new cops break for a while
+  # after a release, until the docs are rebuilt, so pull requests (which are
+  # mostly Dependabot's) skip it.
+  links:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: ./output
+      - run: bin/check-links
+
   deploy:
     needs: build
     if: github.ref == 'refs/heads/main'

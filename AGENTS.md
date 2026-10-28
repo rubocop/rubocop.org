@@ -19,7 +19,7 @@ gems in `Gemfile.lock` changes the site.
 
 | Path | What lives there |
 |------|------------------|
-| `bin/` | the Bridgetown and RuboCop binstubs, and the checks on a built site (`check-pages.js`) |
+| `bin/` | the Bridgetown and RuboCop binstubs, and the checks on a built site (`check-pages.js`, `check-links`) |
 | `src/` | the pages (`index.erb`, `cops.erb`, `playground.erb`, `404.erb`), partials and the layout |
 | `src/_data/` | hand-kept data: the team, the history log, the plugin list, site metadata |
 | `plugins/builders/` | build-time data: the cop registry, the demo runs, the How it works walkthrough, the editor's language server session, GitHub releases, Meta Redux posts, Open Collective backers, the playground's gem archive, template helpers |
@@ -41,6 +41,7 @@ bin/rubocop
 yamllint -s .
 codespell
 bin/check-pages.js                         # on a production build: every page in headless Chrome
+bin/check-links                            # on a production build: links into the docs, the style guide, GitHub
 ```
 
 ## Gotchas

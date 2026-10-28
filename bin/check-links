@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Checks the links from the built site to RuboCop's docs, the style guide,
+# GitHub and Meta Redux: every page has to answer, and every #fragment has to
+# be an id on it. The site builds over a thousand links into the docs, and a
+# docs page that loses an anchor still answers, so nothing else would notice.
+# Backers' links are theirs to keep working and aren't checked.
+#
+#   bin/check-links [dir]   (output/ by default)
+
+require 'cgi'
+require 'net/http'
+require 'uri'
+
+HOSTS = %w[docs.rubocop.org rubystyle.guide github.com metaredux.com].freeze
+# Pages fetched at once.
+THREADS = 8
+HEADERS = { 'User-Agent' => 'rubocop.org link check' }.freeze
+REDIRECTS = 5
+# Rate limits and server errors get a couple more tries.
+ATTEMPTS = 3
+RETRY = [Net::HTTPTooManyRequests, Net::HTTPServerError].freeze
+
+# Each link, with the pages it's on.
+def links(dir)
+  Dir.glob('**/*.html', base: dir).each_with_object(Hash.new { |links, url| links[url] = Set.new }) do |file, links|
+    File.read(File.join(dir, file)).scan(/href="(https?:[^"]+)"/) do |(href)|
+      url = CGI.unescapeHTML(href)
+      links[url] << "/#{file.delete_suffix('index.html')}" if HOSTS.include?(URI(url).host)
+    rescue URI::InvalidURIError
+      next
+    end
+  end
+end
+
+# The page's HTML, after redirects.
+def fetch(url, redirects = REDIRECTS)
+  response = request(url)
+  return response.body if response.is_a?(Net::HTTPSuccess)
+  raise "#{response.code} #{response.message}" unless response.is_a?(Net::HTTPRedirection)
+  raise 'too many redirects' if redirects.zero?
+
+  fetch(URI.join(url, response['location']).to_s, redirects - 1)
+end
+
+def request(url, attempt = 1)
+  response = Net::HTTP.get_response(URI(url), HEADERS)
+  return response if attempt == ATTEMPTS || RETRY.none? { |kind| response.is_a?(kind) }
+
+  sleep(2**attempt)
+  request(url, attempt + 1)
+end
+
+def ids(html)
+  html.scan(/\s(?:id|name)="([^"]+)"/).flatten.to_set
+end
+
+# What's wrong with the links to one page.
+def check(page, urls, links)
+  ids = ids(fetch(page))
+  urls.filter_map do |url|
+    fragment = URI(url).fragment
+    next if fragment.nil? || ids.include?(CGI.unescape(fragment))
+
+    "#{url} (#{on([url], links)}): nothing there has the id #{fragment}"
+  end
+rescue StandardError => e
+  ["#{page} (#{on(urls, links)}): #{e.message}"]
+end
+
+def on(urls, links)
+  "on #{urls.flat_map { |url| links[url].to_a }.uniq.join(', ')}"
+end
+
+links = links(ARGV.fetch(0, 'output'))
+pages = Queue.new
+links.keys.group_by { |url| url.split('#').first }.each { |page| pages << page }
+pages.close
+problems = Array.new(THREADS) do
+  Thread.new do
+    found = []
+    while (page, urls = pages.pop)
+      found.concat(check(page, urls, links))
+    end
+    found
+  end
+end.flat_map(&:value).sort
+
+puts problems
+puts problems.empty? ? "All #{links.size} links check out" : "\n#{problems.size} broken"
+exit(problems.empty?)

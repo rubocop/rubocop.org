@@ -37,6 +37,7 @@ Then there are checks on a production build (a development build adds live reloa
 ```sh
 BRIDGETOWN_ENV=production BASE_PATH=/ bin/bridgetown deploy
 bin/check-pages.js   # every page in headless Chrome, the playground included
+bin/check-links      # the links into the docs, the style guide, GitHub and Meta Redux
 ```
 
 ## How the pages are built
@@ -59,6 +60,6 @@ The fonts are Martian Grotesk and Martian Mono by Evil Martians, under the SIL O
 
 ## Deployment
 
-The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy`, runs the page checks on it and deploys the `output/` directory on every push to `main` and once a day, to pick up new releases and posts.
+The site is deployed to GitHub Pages via a [GitHub Actions workflow](.github/workflows/gh-pages.yml). It builds the site with `bin/bridgetown deploy`, runs the page checks on it and deploys the `output/` directory on every push to `main` and once a day, to pick up new releases and posts. The link check runs next to the deploy rather than before it, so a broken link doesn't hold the site back.
 
 The workflow automatically sets `BASE_PATH` based on the repository. Forks get `/rubocop.org` so the site works at `<username>.github.io/rubocop.org/`, while the main repo uses `/` for the `rubocop.org` custom domain.
