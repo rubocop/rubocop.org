@@ -203,6 +203,12 @@
 
 .news li { grid-template-columns: 6.8rem 1fr; }
 
+/* A long cop name has nowhere to break, and would widen the page on a phone. */
+.news li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 /* who's behind it */
 
 .people {
